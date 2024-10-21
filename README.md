@@ -4,4 +4,7 @@
 <h4>后端技术：springboot+Mybatilsplus<br></h4>
 <h4>后端代码链接：</h4>
 https://github.com/ipen47/WebSystemDemo2<br>
-![image](https://github.com/ipen47/img/blob/main/Snipaste_2024-10-21_18-15-38.png)
+<img src="https://github.com/ipen47/img/blob/main/Snipaste_2024-10-21_18-15-38.png">
+<img src="https://github.com/ipen47/img/blob/main/Snipaste_2024-10-21_18-17-04.png">
+<img src="https://github.com/ipen47/img/blob/main/Snipaste_2024-10-21_18-17-13.png">
+<img src="https://github.com/ipen47/img/blob/main/Snipaste_2024-10-21_18-17-44.png">
