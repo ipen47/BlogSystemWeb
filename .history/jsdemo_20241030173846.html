@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      let year = prompt("请输入一个年");
+
+      let month = prompt("请输入一个月份");
+      year = Number(year);
+      month = Number(month);
+      let day = 0;
+      if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+        //判断为闰年
+        day = 29;
+      } else {
+        day = 28;
+      }
+      switch (month) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+          console.log(31);
+          break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+          console.log(30);
+          break;
+        case 2:
+          console.log(day);
+          break;
+        default:
+          console.log("你输入的月份有误");
+      }
+    </script>
+  </body>
+</html>

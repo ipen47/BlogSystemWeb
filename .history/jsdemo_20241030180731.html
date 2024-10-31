@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      function rand(min, max) {
+        let minx = 0;
+        if (min > max) {
+          minx = max;
+          max = min;
+          min = minx;
+        }
+        let r = Math.floor(Math.random() * max + min);
+        return r;
+      }
+      console.log(rand(30, 1));
+    </script>
+  </body>
+</html>
