@@ -13,6 +13,10 @@
         >{{ item.meta.title }}</el-breadcrumb-item
       >
     </el-breadcrumb>
+    <svg-icon icon-class="github" style="margin-left: auto" />
+    gitHub
+    <svg-icon icon-class="wechat" style="margin-left: 20px" />
+    wechat
     <!-- 下拉菜单 -->
     <el-dropdown>
       <span class="el-dropdown-link">
@@ -41,10 +45,11 @@ export default {
 
   data() {
     return {
+      url: "https://gitee.com/y_project/RuoYi-Vue",
       // 定义用户登录对象
       adminInfo: {
         name: "",
-        Img: require("/src/assets/icon/头像 4.png"),
+        Img: require("/src/assets/icon/images/头像 4.png"),
       },
     };
   },
@@ -54,6 +59,9 @@ export default {
     this.adminInfo.name = admin.name;
   },
   methods: {
+    goto() {
+      window.open(this.url);
+    },
     change() {
       this.$emit("changeshow");
     },
