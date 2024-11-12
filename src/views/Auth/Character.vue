@@ -206,12 +206,14 @@ export default {
       CharacterList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     //关闭弹框
     handleClose(done) {
@@ -229,24 +231,28 @@ export default {
       CharacterList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     //分页-改变页大小
     sizeChange() {
       CharacterList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     // 添加角色
     addSubmit(formName) {
@@ -258,20 +264,22 @@ export default {
             type: "warning",
           })
             .then(() => {
-              CharacterAdd(this.roleform).then((resp) => {
-                if (resp.msg == "success") {
-                  this.$message({
-                    type: "success",
-                    message: "添加成功!",
-                  });
-                  //重新加载用户列表界面
-                  location.reload();
-                  // 清空表单内容
-                  this.$refs[formName].resetFields();
-                  //退出表单填写弹框
-                  this.dialogFormVisible = false;
-                }
-              });
+              CharacterAdd(this.roleform)
+                .then((resp) => {
+                  if (resp.msg == "success") {
+                    this.$message({
+                      type: "success",
+                      message: "添加成功!",
+                    });
+                    //重新加载用户列表界面
+                    location.reload();
+                    // 清空表单内容
+                    this.$refs[formName].resetFields();
+                    //退出表单填写弹框
+                    this.dialogFormVisible = false;
+                  }
+                })
+                .catch((err) => {});
             })
             .catch(() => {
               //退出表单填写弹框
@@ -302,18 +310,20 @@ export default {
         type: "warning",
       })
         .then(() => {
-          CharacterEdit(this.editform).then((resp) => {
-            if (resp.msg == "success") {
-              this.$message({
-                type: "success",
-                message: "修改成功!",
-              });
-              //重新加载用户列表界面
-              location.reload();
-              //退出表单填写弹框
-              this.dialogFormVisible = false;
-            }
-          });
+          CharacterEdit(this.editform)
+            .then((resp) => {
+              if (resp.msg == "success") {
+                this.$message({
+                  type: "success",
+                  message: "修改成功!",
+                });
+                //重新加载用户列表界面
+                location.reload();
+                //退出表单填写弹框
+                this.dialogFormVisible = false;
+              }
+            })
+            .catch((err) => {});
         })
         .catch(() => {
           //退出表单编辑弹框
@@ -328,16 +338,18 @@ export default {
         type: "warning",
       })
         .then(() => {
-          CharacterDelete(row.roleId).then((resp) => {
-            if (resp.msg == "success") {
-              this.$message({
-                type: "success",
-                message: "【角色：" + row.roleName + "】已删除",
-              });
-              //重新加载用户列表界面
-              location.reload();
-            }
-          });
+          CharacterDelete(row.roleId)
+            .then((resp) => {
+              if (resp.msg == "success") {
+                this.$message({
+                  type: "success",
+                  message: "【角色：" + row.roleName + "】已删除",
+                });
+                //重新加载用户列表界面
+                location.reload();
+              }
+            })
+            .catch((err) => {});
         })
         .catch(() => {});
     },
@@ -348,9 +360,11 @@ export default {
       this.dialogFormVisible3 = true;
       //通过角色id来获取当前角色权限
 
-      getAuth(row.roleId).then((resp) => {
-        this.authCheck = resp;
-      });
+      getAuth(row.roleId)
+        .then((resp) => {
+          this.authCheck = resp;
+        })
+        .catch((err) => {});
       // 获取权限信息
       list().then((resp) => {
         this.auths = resp;
@@ -368,17 +382,19 @@ export default {
           setAuth({
             roleId: this.roleId,
             ids: this.authCheck,
-          }).then((resp) => {
-            if (resp) {
-              this.$message({
-                showClose: true,
-                message: "权限设置成功",
-                type: "success",
-              });
-              this.dialogFormVisible3 = false;
-              location.reload;
-            }
-          });
+          })
+            .then((resp) => {
+              if (resp) {
+                this.$message({
+                  showClose: true,
+                  message: "权限设置成功",
+                  type: "success",
+                });
+                this.dialogFormVisible3 = false;
+                location.reload;
+              }
+            })
+            .catch((err) => {});
         })
         .catch(() => {
           //回到表单编辑弹框

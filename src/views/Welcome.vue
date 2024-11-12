@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div calss="container">
+    <el-backtop target=".container" :visibility-height="50">
+      <div>回到顶部</div>
+    </el-backtop>
     <h1>欢迎你，开始美好的一天吧！</h1>
     <!-- 分割线 -->
     <el-divider></el-divider>
@@ -181,6 +184,10 @@ export default {
 };
 </script>
 <style scoped>
+.container {
+  height: 100%;
+  overflow-x: hidden;
+}
 .userinfo {
   background-color: #fff;
   margin-top: 20px;

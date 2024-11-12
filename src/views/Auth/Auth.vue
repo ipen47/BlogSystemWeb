@@ -156,12 +156,14 @@ export default {
       AuthList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     //关闭弹框
     handleClose(done) {
@@ -178,24 +180,28 @@ export default {
       AuthList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     //分页-改变页大小
     sizeChange() {
       AuthList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     // 添加权限
     addSubmit(formName) {
@@ -207,20 +213,22 @@ export default {
             type: "warning",
           })
             .then(() => {
-              AuthAdd(this.authform).then((resp) => {
-                if (resp.msg == "success") {
-                  this.$message({
-                    type: "success",
-                    message: "添加成功!",
-                  });
-                  //重新加载用户列表界面
-                  location.reload();
-                  // 清空表单内容
-                  this.$refs[formName].resetFields();
-                  //退出表单填写弹框
-                  this.dialogFormVisible = false;
-                }
-              });
+              AuthAdd(this.authform)
+                .then((resp) => {
+                  if (resp.msg == "success") {
+                    this.$message({
+                      type: "success",
+                      message: "添加成功!",
+                    });
+                    //重新加载用户列表界面
+                    location.reload();
+                    // 清空表单内容
+                    this.$refs[formName].resetFields();
+                    //退出表单填写弹框
+                    this.dialogFormVisible = false;
+                  }
+                })
+                .catch((err) => {});
             })
             .catch(() => {
               //退出表单填写弹框
@@ -251,18 +259,20 @@ export default {
         type: "warning",
       })
         .then(() => {
-          AuthEdit(this.editform).then((resp) => {
-            if (resp.msg == "success") {
-              this.$message({
-                type: "success",
-                message: "修改成功!",
-              });
-              //重新加载用户列表界面
-              location.reload();
-              //退出表单填写弹框
-              this.dialogFormVisible = false;
-            }
-          });
+          AuthEdit(this.editform)
+            .then((resp) => {
+              if (resp.msg == "success") {
+                this.$message({
+                  type: "success",
+                  message: "修改成功!",
+                });
+                //重新加载用户列表界面
+                location.reload();
+                //退出表单填写弹框
+                this.dialogFormVisible = false;
+              }
+            })
+            .catch((err) => {});
         })
         .catch(() => {
           //退出表单编辑弹框
@@ -277,16 +287,18 @@ export default {
         type: "warning",
       })
         .then(() => {
-          AuthDelete(row.authorityId).then((resp) => {
-            if (resp.msg == "success") {
-              this.$message({
-                type: "success",
-                message: "【权限：" + row.authName + "】已删除",
-              });
-              //重新加载用户列表界面
-              location.reload();
-            }
-          });
+          AuthDelete(row.authorityId)
+            .then((resp) => {
+              if (resp.msg == "success") {
+                this.$message({
+                  type: "success",
+                  message: "【权限：" + row.authName + "】已删除",
+                });
+                //重新加载用户列表界面
+                location.reload();
+              }
+            })
+            .catch((err) => {});
         })
         .catch(() => {});
     },

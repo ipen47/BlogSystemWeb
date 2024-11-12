@@ -73,6 +73,7 @@ export default {
         type: "warning",
       })
         .then(function () {
+          localStorage.removeItem("access-admin");
           _this.$router.push("/login");
         })
         .catch(() => {});

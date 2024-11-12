@@ -96,8 +96,8 @@
         </el-form-item>
         <el-form-item label="性别：">
           <el-radio-group v-model="userform.sex">
-            <el-radio label="男" @change="change">男</el-radio>
-            <el-radio label="女" @change="change">女</el-radio>
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="年龄：" prop="age">
@@ -141,8 +141,8 @@
         </el-form-item>
         <el-form-item label="性别：">
           <el-radio-group v-model="editform.sex">
-            <el-radio label="男" @change="change">男</el-radio>
-            <el-radio label="女" @change="change">女</el-radio>
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="年龄：" prop="age">
@@ -186,7 +186,6 @@
             clearable
             placeholder="请选择"
             size="samll"
-            @change="change"
           >
             <el-option
               v-for="item in roles"
@@ -424,12 +423,14 @@ export default {
       UserList({
         currentPage: this.currentPage,
         pagesize: this.pagesize,
-      }).then((resp) => {
-        console.log(resp.data);
-        this.tableData = resp.data.records;
-        this.pagesize = resp.data.pagesize;
-        this.total = resp.data.total;
-      });
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
     },
     //关闭弹框
     handleClose(done) {
@@ -557,13 +558,17 @@ export default {
       //展示角色设置弹框
       this.dialogFormVisible3 = true;
       //通过用户id来获取当前用户角色
-      getRole(row.id).then((resp) => {
-        this.roleform.roleId = resp.roleId;
-      });
+      getRole(row.id)
+        .then((resp) => {
+          this.roleform.roleId = resp.roleId;
+        })
+        .catch(() => {});
       //获取角色信息
-      roleList().then((resp) => {
-        this.roles = resp;
-      });
+      roleList()
+        .then((resp) => {
+          this.roles = resp;
+        })
+        .catch(() => {});
     },
     //设置角色
     roleSubmit(formName) {
@@ -582,17 +587,19 @@ export default {
           _this.$refs[formName].validate((valid) => {
             if (valid) {
               axios;
-              setRole(obj).then((resp) => {
-                if (resp) {
-                  _this.$message({
-                    showClose: true,
-                    message: "角色设置成功",
-                    type: "success",
-                  });
-                  _this.dialogFormVisible3 = false;
-                  location.reload;
-                }
-              });
+              setRole(obj)
+                .then((resp) => {
+                  if (resp) {
+                    _this.$message({
+                      showClose: true,
+                      message: "角色设置成功",
+                      type: "success",
+                    });
+                    _this.dialogFormVisible3 = false;
+                    location.reload;
+                  }
+                })
+                .catch((err) => {});
             } else {
               _this.$message({
                 type: "error",
@@ -612,11 +619,6 @@ export default {
       this.dialogFormVisible = false;
       this.$refs[formName].resetFields();
     },
-    change() {
-      // console.log(this.rolefrom.roleName);
-      // console.log(this.rolefrom.roleId);
-    },
-
     //分页-改变页
     pageChange() {
       const _this = this;
@@ -626,20 +628,24 @@ export default {
         UserList({
           currentPage: this.currentPage,
           pagesize: this.pagesize,
-        }).then(function (resp) {
-          console.log(resp.data);
-          _this.tableData = resp.data.records;
-          _this.pagesize = resp.data.pagesize;
-          _this.total = resp.data.total;
-        });
+        })
+          .then(function (resp) {
+            console.log(resp.data);
+            _this.tableData = resp.data.records;
+            _this.pagesize = resp.data.pagesize;
+            _this.total = resp.data.total;
+          })
+          .catch((err) => {});
       } else {
         //如果是搜索状态，执行搜索结果的分页
         _this.searchform.page = _this.currentPage;
-        UserSearch(this.searchform).then(function (resp) {
-          _this.tableData = resp.data.records;
-          _this.total = resp.data.total;
-          console.log(resp.data);
-        });
+        UserSearch(this.searchform)
+          .then(function (resp) {
+            _this.tableData = resp.data.records;
+            _this.total = resp.data.total;
+            console.log(resp.data);
+          })
+          .catch((err) => {});
       }
     },
     //分页-改变页大小
@@ -651,20 +657,24 @@ export default {
         UserList({
           currentPage: this.currentPage,
           pagesize: this.pagesize,
-        }).then(function (resp) {
-          console.log(resp.data);
-          _this.tableData = resp.data.records;
-          _this.pagesize = resp.data.pagesize;
-          _this.total = resp.data.total;
-        });
+        })
+          .then(function (resp) {
+            console.log(resp.data);
+            _this.tableData = resp.data.records;
+            _this.pagesize = resp.data.pagesize;
+            _this.total = resp.data.total;
+          })
+          .catch((err) => {});
       } else {
         //如果是搜索状态，改变搜索结果的页大小
         _this.searchform.size = _this.pagesize;
-        UserSearch(this.searchform).then(function (resp) {
-          _this.tableData = resp.data.records;
-          _this.total = resp.data.total;
-          console.log(resp.data);
-        });
+        UserSearch(this.searchform)
+          .then(function (resp) {
+            _this.tableData = resp.data.records;
+            _this.total = resp.data.total;
+            console.log(resp.data);
+          })
+          .catch((err) => {});
       }
     },
   },

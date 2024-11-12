@@ -37,7 +37,7 @@
           ​ <i class="el-icon-s-management"></i><span>商品管理</span> ​
         </el-menu-item>
         <el-menu-item index="/addProduct" style="padding-left: 80px">
-          ​ <i class="el-icon-plus"></i><span>添加商品</span> ​
+          <i class="el-icon-plus"></i><span>添加商品</span>
         </el-menu-item>
       </el-submenu>
       <el-submenu index="3">
@@ -45,7 +45,7 @@
           <i class="el-icon-document-copy"></i><span>订单管理</span>
         </template>
         <el-menu-item index="/orderList" style="padding-left: 80px">
-          ​ <i class="el-icon-menu"></i><span>订单列表</span> ​
+          <i class="el-icon-menu"></i><span>订单列表</span>
         </el-menu-item>
       </el-submenu>
       <el-submenu index="4">
@@ -53,13 +53,13 @@
           <i class="el-icon-s-data"></i><span>数据统计</span>
         </template>
         <el-menu-item index="/line" style="padding-left: 80px">
-          ​ <i class="el-icon-star-on"></i><span>折线图</span> ​
+          <i class="el-icon-star-on"></i><span>折线图</span>
         </el-menu-item>
         <el-menu-item index="/bar" style="padding-left: 80px">
-          ​ <i class="el-icon-s-data"></i><span>柱形图</span> ​
+          <i class="el-icon-s-data"></i><span>柱形图</span>
         </el-menu-item>
         <el-menu-item index="/pie" style="padding-left: 80px">
-          ​ <i class="el-icon-star-off"></i><span>饼图</span> ​
+          <i class="el-icon-star-off"></i><span>饼图</span> ​
         </el-menu-item>
       </el-submenu>
       <el-menu-item index="/screen">

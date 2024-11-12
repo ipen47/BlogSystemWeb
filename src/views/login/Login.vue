@@ -100,7 +100,7 @@ export default {
                     "access-admin",
                     JSON.stringify(resp.data)
                   );
-                  this.$router.push("/home");
+                  this.$router.replace("/home");
                 }
               })
               .catch(function (error) {

@@ -31,7 +31,8 @@ const routes = [
   {
     path: "/login",
     name: "登录",
-    component: Login,
+    component: () =>
+      import(/*webpackChunkName:"course"*/ "../views/login/Login.vue"),
   },
   {
     path: "/error",
@@ -39,8 +40,8 @@ const routes = [
     component: Error,
   },
   {
-    path: "/404",
-    name: "token校验失败",
+    path: "*",
+    name: "页面找不到",
     component: E404,
   },
   {
@@ -197,35 +198,7 @@ const router = new VueRouter({
   routes,
 });
 // 导航守卫;
-router.beforeEach((to, from, next) => {
-  //如果进入的页面不是登录界面
-  if (to.path !== "/login") {
-    let admin = JSON.parse(window.localStorage.getItem("access-admin"));
-    //如果含有登录信息
-    if (admin) {
-      // 检验token合法性
-      checkToken()
-        .then((resp) => {
-          // if (resp.code == "-1") {
-          //   // 校验失败
-          //   console.log("校验失败");
-          //   next("/error");
-          // }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      next();
-    } else if (to.path === "/regist") {
-      next();
-    } else {
-      //不含有登录信息，则前往登录页进行登录
-      next("/login");
-    }
-  } else {
-    // 如果进入的是登录页，则通过并且清楚本地存储
-    localStorage.removeItem("access-admin");
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+
+// });
 export default router;

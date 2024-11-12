@@ -27,7 +27,7 @@
               </div>
             </div>
           </div>
-          <div class="number">3</div>
+          <div class="number">1</div>
         </div>
         <div class="subtitle">哎呀！你登录的时间太久啦</div>
         <div class="btn">

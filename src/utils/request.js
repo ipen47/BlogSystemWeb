@@ -39,16 +39,22 @@ service.interceptors.response.use(
       //token过期，无权限访问
       router.push("/error");
       Message.info("token已过期,请重新登录");
-
       return Promise.reject(new Error(msg));
+    }
+    if (code === 403) {
+      //未登录，无权限访问
+      router.push("/login");
+      Message.info("请先登录！");
     }
     if (code == 404) {
       router.push("/E404");
     }
     if (code == 500) {
+      console.log("500");
       Message.error("系统未知错误，请联系管理员");
+      return Promise.reject();
     }
-    if (code === -1 || code === -2 || code === 1) {
+    if (code === -2 || code === 1) {
       // 使用 Notification 显示错误提示，并保存实例
       notificationInstance = Notification.error({
         title: "错误",
