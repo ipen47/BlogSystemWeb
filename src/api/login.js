@@ -2,7 +2,7 @@ import request from "@/utils/request";
 //登录
 export function login(data) {
   return request({
-    url: "admin/login",
+    url: "user/login",
     method: "post",
     data: data,
     headers: {
@@ -10,17 +10,10 @@ export function login(data) {
     },
   });
 }
-//检验token
-export function checkToken() {
-  return request({
-    url: "admin/checkToken",
-    method: "get",
-  });
-}
 //注册
 export function regist(data) {
   return request({
-    url: "admin/register",
+    url: "user/register",
     method: "post",
     data: data,
     headers: {

@@ -1,8 +1,5 @@
 <template>
   <div calss="container">
-    <el-backtop target=".container" :visibility-height="50">
-      <div>回到顶部</div>
-    </el-backtop>
     <h1>欢迎你，开始美好的一天吧！</h1>
     <!-- 分割线 -->
     <el-divider></el-divider>
@@ -17,17 +14,17 @@
     <!-- 用户描述列表 -->
     <div class="userinfo">
       <el-descriptions title="用户信息">
-        <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
-        <el-descriptions-item label="性别">男</el-descriptions-item>
-        <el-descriptions-item label="年龄">18</el-descriptions-item>
-        <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-        <el-descriptions-item label="邮箱">zzz@123.com</el-descriptions-item>
+        <el-descriptions-item
+          v-for="(item, index) in userInfoList"
+          :label="item.label"
+          :key="index"
+        >
+          {{ item.value }}
+        </el-descriptions-item>
+
         <el-descriptions-item label="备注">
           <el-tag size="small">系统管理员</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="地址"
-          >江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item
-        >
       </el-descriptions>
     </div>
     <!-- 分割线 -->
@@ -113,6 +110,7 @@
 <script>
 import Calendar from "../components/Calendar.vue";
 import Transfer from "../components/Transfer .vue";
+import { getInfo } from "@/api/getUserData";
 export default {
   components: {
     Calendar,
@@ -120,14 +118,14 @@ export default {
   },
   data() {
     return {
-      //用户信息
-      adminInfo: {
+      label: ["用户名", "性别", "年龄", "手机号", "邮箱", "地址"],
+      userInfo: {
         name: "",
         sex: "",
         age: "",
         telphone: "",
         email: "",
-        adress: "",
+        address: "",
       },
       //倒计时日期参数
       yeardate: new Date("2025-01-29"), //2025春节
@@ -151,7 +149,18 @@ export default {
       activeNames: ["1"],
     };
   },
+  computed: {
+    userInfoList() {
+      // 将 userInfo 对象的值和 label 数组合并成一个新数组
+      const values = Object.values(this.userInfo);
+      return this.label.map((label, index) => ({
+        label: label,
+        value: values[index],
+      }));
+    },
+  },
   created() {
+    this.getAdminInfo();
     this.startCountdown();
   },
   beforeDestroy() {
@@ -160,6 +169,16 @@ export default {
     }
   },
   methods: {
+    getAdminInfo() {
+      let loginInfo = JSON.parse(window.localStorage.getItem("access-admin"));
+      console.log(loginInfo.id);
+      getInfo({ id: loginInfo.id })
+        .then((resp) => {
+          this.userInfo = resp.data;
+        })
+        .catch((err) => {});
+      console.log("aaa");
+    },
     startCountdown() {
       //setInterval计算一次剩余时间，并动态更新days、、hours和minutes的seconds值。
       this.interval = setInterval(() => {

@@ -6,6 +6,7 @@
       </div>
       <div class="login-form">
         <el-form :model="form" :rules="loginRules" ref="loginForm">
+          <!-- 用户名 -->
           <el-form-item prop="username">
             <el-input
               type="text"
@@ -18,6 +19,7 @@
               ></template>
             </el-input>
           </el-form-item>
+          <!-- 密码 -->
           <el-form-item prop="password">
             <el-input
               type="password"
@@ -30,6 +32,22 @@
                 ><i style="font-size: 20px" class="el-icon-key"></i
               ></template>
             </el-input>
+          </el-form-item>
+          <!-- 验证码 -->
+          <el-form-item prop="code">
+            <el-input
+              v-model="form.verCode"
+              auto-complete="off"
+              placeholder="请输入验证码"
+              style="width: 65%"
+            >
+              <template slot="prepend"
+                ><i style="font-size: 20px" class="el-icon-user"></i
+              ></template>
+            </el-input>
+            <div class="login-code">
+              <img :src="codeUrl" class="login-code-img" @click="getCode" />
+            </div>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -53,6 +71,7 @@
 </template>
 <script>
 import { login } from "@/api/login";
+import { getCodeImg } from "@/api/captcha";
 export default {
   name: "Login",
 
@@ -62,17 +81,36 @@ export default {
       form: {
         name: "admin",
         password: "123456",
+        verCode: "",
+        verKey: "",
       },
+      codeUrl: "",
+
       loginRules: {
         name: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
         password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
         ],
+        verCode: [
+          { required: true, message: "验证码不能为空", trigger: "blur" },
+        ],
       },
     };
   },
+  created() {
+    this.getCode();
+  },
   mounted: function () {},
   methods: {
+    getCode() {
+      this.form.verCode = "";
+      getCodeImg()
+        .then((resp) => {
+          this.form.verKey = resp.data.key;
+          this.codeUrl = resp.data.codeImg;
+        })
+        .catch((err) => {});
+    },
     handleLogin() {
       this.$refs.loginForm
         .validate()
@@ -82,10 +120,15 @@ export default {
           setTimeout(() => {
             login(this.form)
               .then((resp) => {
-                if (resp.code === -1 || resp.code === -2) {
+                console.log(resp);
+                if (resp.code == -1) {
                   //重置用户名和密码
                   this.form.name = "";
                   this.form.password = "";
+                }
+                if (resp.code == -2) {
+                  this.form.verCode = "";
+                  this.getCode();
                 }
 
                 if (resp.code == 200) {
@@ -142,5 +185,17 @@ export default {
   position: absolute;
   right: 10px;
   bottom: 10px;
+}
+.login-code {
+  width: 33%;
+  height: 38px;
+  float: right;
+}
+.login-code img {
+  cursor: pointer;
+  vertical-align: middle;
+}
+.login-code-img {
+  height: 30px;
 }
 </style>

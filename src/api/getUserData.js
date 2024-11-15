@@ -49,8 +49,16 @@ export function getRole(data) {
 //为用户设置角色;
 export function setRole(data) {
   return request({
-    url: "roleUser/updateRole",
+    url: "roleUser/setRole",
     method: "put",
     data: data,
+  });
+}
+//根据用户id查询用户信息
+export function getInfo(data) {
+  return request({
+    url: "user/userInfo",
+    method: "get",
+    params: data,
   });
 }

@@ -54,7 +54,8 @@ service.interceptors.response.use(
       Message.error("系统未知错误，请联系管理员");
       return Promise.reject();
     }
-    if (code === -2 || code === 1) {
+    if (code === -1 || code === -2) {
+      //-2代码验证码出错
       // 使用 Notification 显示错误提示，并保存实例
       notificationInstance = Notification.error({
         title: "错误",
@@ -64,6 +65,7 @@ service.interceptors.response.use(
       setTimeout(() => {
         notificationInstance.close();
       }, 2000); // 2秒后关闭通知
+      return response.data;
     }
     if (code === 200) {
       return response.data;

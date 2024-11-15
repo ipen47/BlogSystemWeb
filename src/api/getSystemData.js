@@ -85,7 +85,7 @@ export function getAuth(data) {
 //为角色设置权限
 export function setAuth(data) {
   return request({
-    url: "roleAuthority/updateAuth",
+    url: "roleAuthority/setAuth",
     method: "put",
     data: data,
   });
