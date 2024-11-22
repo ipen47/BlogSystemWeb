@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import TextEdit from "../components/TextEdit.vue";
+import TextEdit from "@/components/Edit/TextEdit.vue";
 export default {
   components: {
     TextEdit,

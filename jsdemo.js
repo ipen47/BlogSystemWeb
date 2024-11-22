@@ -1,8 +1,5 @@
-let obj = {
-  name: "lp",
-  age: 18,
-  sex: "男",
-  telphone: "17695100407",
-};
-let arr = Object.values(obj);
-console.log(arr);
+let arr = [1, 2, 32, 4];
+let newArr = arr.filter((iterm, index) => {
+  return index != 2;
+});
+console.log(newArr);

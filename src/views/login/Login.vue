@@ -7,7 +7,7 @@
       <div class="login-form">
         <el-form :model="form" :rules="loginRules" ref="loginForm">
           <!-- 用户名 -->
-          <el-form-item prop="username">
+          <el-form-item prop="name">
             <el-input
               type="text"
               v-model="form.name"
@@ -34,7 +34,7 @@
             </el-input>
           </el-form-item>
           <!-- 验证码 -->
-          <el-form-item prop="code">
+          <el-form-item prop="verCode">
             <el-input
               v-model="form.verCode"
               auto-complete="off"
@@ -56,7 +56,8 @@
               type="primary"
               @click="handleLogin"
               :loading="loading"
-              >登录</el-button
+              ><span v-if="!loading">登 录</span>
+              <span v-else>登 录 中...</span></el-button
             >
           </el-form-item>
         </el-form>
@@ -143,7 +144,7 @@ export default {
                     "access-admin",
                     JSON.stringify(resp.data)
                   );
-                  this.$router.replace("/home");
+                  this.$router.replace("/");
                 }
               })
               .catch(function (error) {

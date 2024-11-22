@@ -108,8 +108,8 @@
   </div>
 </template>
 <script>
-import Calendar from "../components/Calendar.vue";
-import Transfer from "../components/Transfer .vue";
+import Calendar from "../components/eleement ui/Calendar.vue";
+import Transfer from "../components/eleement ui/Transfer .vue";
 import { getInfo } from "@/api/getUserData";
 export default {
   components: {
@@ -171,13 +171,12 @@ export default {
   methods: {
     getAdminInfo() {
       let loginInfo = JSON.parse(window.localStorage.getItem("access-admin"));
-      console.log(loginInfo.id);
+
       getInfo({ id: loginInfo.id })
         .then((resp) => {
           this.userInfo = resp.data;
         })
         .catch((err) => {});
-      console.log("aaa");
     },
     startCountdown() {
       //setInterval计算一次剩余时间，并动态更新days、、hours和minutes的seconds值。

@@ -40,6 +40,7 @@
   </el-header>
 </template>
 <script>
+import globalConfig from "@/utils/gloabl.config";
 export default {
   props: ["isCollapse"],
 
@@ -81,6 +82,17 @@ export default {
   },
   computed: {
     breadcrumbList() {
+      let matched = this.$route.matched;
+      matched[0].path = "/";
+      let invaildList = globalConfig.invaildRoutes;
+      //循环将不用跳转的路由置为空
+      for (let item of matched) {
+        if (invaildList.indexOf(item.path) != -1) {
+          //路由在失效路由名单中，将其设为空
+          item.path = "";
+        }
+        console.log(item.path);
+      }
       return this.$route.matched;
     },
     //退出登录

@@ -8,7 +8,7 @@ import router from "@/router";
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
   // baseURL: "http://localhost:8888/",
-  timeout: 6000,
+  timeout: 30 * 1000,
 });
 //定义elementui通知组组件对象
 let notificationInstance;

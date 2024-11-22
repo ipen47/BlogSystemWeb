@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import Header from "../components/Container/Header.vue";
-import Aside from "../components/Container/Aside.vue";
-import Main from "../components/Container/Main.vue";
-import Footer from "../components/Container/Footer.vue";
+import Header from "../components/Layout/Header.vue";
+import Aside from "../components/Layout/Aside.vue";
+import Main from "../components/Layout/Main.vue";
+import Footer from "../components/Layout/Footer.vue";
 export default {
   components: {
     Header,
