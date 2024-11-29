@@ -6,12 +6,12 @@ function resolve(dir) {
 }
 module.exports = defineConfig({
   configureWebpack: {
-    // resolve: {
-    //   alias: {
-    //     // 配置路径别名
-    //     "@": resolve("src"),
-    //   },
-    // },
+    resolve: {
+      alias: {
+        // 配置路径别名
+        "@": resolve("src"),
+      },
+    },
   },
 
   //代理转发

@@ -36,6 +36,7 @@
               plain
               style="width: 100%"
               type="primary"
+              @keyup.enter="handleRegist"
               @click="handleRegist"
               :loading="loading"
               >注册</el-button

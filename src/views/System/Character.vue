@@ -24,6 +24,8 @@
       </el-table-column>
       <el-table-column align="center" label="角色名称" prop="roleName">
       </el-table-column>
+      <el-table-column align="center" label="创建时间" prop="createTime">
+      </el-table-column>
 
       <el-table-column
         label="用户操作"
@@ -178,6 +180,7 @@ export default {
       roleform: {
         roleId: "",
         roleName: "",
+        createTime: "",
       },
       //编辑角色表单信息
       editform: {},

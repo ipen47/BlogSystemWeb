@@ -31,7 +31,7 @@
 
         <el-dropdown-item
           class="icon el-icon-switch-button"
-          @click.native="Exit"
+          @click.native="LogOut"
         >
           退出</el-dropdown-item
         >
@@ -54,6 +54,23 @@ export default {
       },
     };
   },
+  computed: {
+    breadcrumbList() {
+      let matched = this.$route.matched;
+      console.log("matched:", matched);
+      matched[0].path = "/";
+      let invaildList = globalConfig.invaildRoutes;
+      //失效路由名单
+      //循环将不用跳转的路由置为空
+      for (let item of matched) {
+        if (invaildList.indexOf(item.path) != -1) {
+          //路由在失效路由名单中，将其设为空
+          item.path = "";
+        }
+      }
+      return this.$route.matched;
+    },
+  },
   created() {
     //获取用户登录信息
     let admin = JSON.parse(window.localStorage.getItem("access-admin"));
@@ -66,36 +83,23 @@ export default {
     change() {
       this.$emit("changeshow");
     },
-    Exit() {
-      let _this = this;
+    //退出登录
+    LogOut() {
       this.$confirm("确定要退出当前用户登录界面?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(function () {
-          localStorage.removeItem("access-admin");
-          _this.$router.push("/login");
+        .then(() => {
+          this.$store.dispatch("LogOut").then((res) => {
+            console.log(res);
+            location.reload();
+          });
+
+          this.$router.push("/login");
         })
         .catch(() => {});
     },
-  },
-  computed: {
-    breadcrumbList() {
-      let matched = this.$route.matched;
-      matched[0].path = "/";
-      let invaildList = globalConfig.invaildRoutes;
-      //循环将不用跳转的路由置为空
-      for (let item of matched) {
-        if (invaildList.indexOf(item.path) != -1) {
-          //路由在失效路由名单中，将其设为空
-          item.path = "";
-        }
-        console.log(item.path);
-      }
-      return this.$route.matched;
-    },
-    //退出登录
   },
 };
 </script>

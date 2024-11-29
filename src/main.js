@@ -7,6 +7,7 @@ import "element-ui/lib/theme-chalk/index.css";
 import "./assets/css/global.css";
 import BaiduMap from "vue-baidu-map";
 import "./assets/icon"; // icon
+import "./permission";
 // 使用地图，填写ak
 Vue.use(BaiduMap, { ak: "fIdl7zLwYZ2Nsb37peHZvmzy2bjPs8o1k" });
 Vue.use(ElementUI);

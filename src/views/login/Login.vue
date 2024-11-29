@@ -40,6 +40,7 @@
               auto-complete="off"
               placeholder="请输入验证码"
               style="width: 65%"
+              @keyup.enter.native="handleLogin"
             >
               <template slot="prepend"
                 ><i style="font-size: 20px" class="el-icon-user"></i
@@ -144,7 +145,7 @@ export default {
                     "access-admin",
                     JSON.stringify(resp.data)
                   );
-                  this.$router.replace("/");
+                  this.$router.push("/");
                 }
               })
               .catch(function (error) {

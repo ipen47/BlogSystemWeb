@@ -3,18 +3,17 @@
     <el-menu
       router
       unique-opened
-      default-active="/index"
+      default-active="/"
       class="el-menu-vertical-demo"
       :collapse="isCollapse"
     >
       <!-- 动态生成多级菜单 -->
-      <MenuTree :menuTree="menuTree"></MenuTree>
+      <MenuTree :menuTree="menuTree" :isCollapse="isCollapse"></MenuTree>
     </el-menu>
   </el-aside>
 </template>
 <script>
-import MenuTree from "@/components/MenuTree";
-import { createMenu } from "@/api/menu";
+import MenuTree from "@/components/Layout/MenuTree.vue";
 export default {
   props: ["isCollapse"],
   components: {
@@ -25,17 +24,14 @@ export default {
       menuTree: [],
     };
   },
+  computed: {},
   created() {
     this.getMenuTree();
   },
   methods: {
     getMenuTree() {
-      createMenu()
-        .then((res) => {
-          this.menuTree = res.data;
-          console.log(res);
-        })
-        .catch((err) => {});
+      this.menuTree = this.$store.state.menu.menuTree;
+      console.log(this.menuTree);
     },
   },
 };
@@ -55,5 +51,9 @@ export default {
 }
 .el-menu.el-menu--collapse {
   width: 60px;
+}
+/* 确保折叠时隐藏文字 */
+.el-menu--collapse .el-menu-item span {
+  display: none !important;
 }
 </style>

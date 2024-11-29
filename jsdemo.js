@@ -1,5 +1,5 @@
-let arr = [1, 2, 32, 4];
-let newArr = arr.filter((iterm, index) => {
-  return index != 2;
-});
-console.log(newArr);
+let pageItem = 2;
+let allItem = 13;
+let page =
+  allItem % pageItem === 0 ? allItem : parseInt(allItem / pageItem) + 1;
+console.log(page);

@@ -41,7 +41,7 @@
           type="warning"
           icon="el-icon-refresh-right"
           size="medium"
-          @click="(searchform.username = ''), (searchform.age = '')"
+          @click="resetList()"
           >重置</el-button
         >
         <el-button
@@ -96,8 +96,8 @@
         </el-form-item>
         <el-form-item label="性别：">
           <el-radio-group v-model="userform.sex">
-            <el-radio label="男" @change="change">男</el-radio>
-            <el-radio label="女" @change="change">女</el-radio>
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="年龄：" prop="age">
@@ -141,8 +141,8 @@
         </el-form-item>
         <el-form-item label="性别：">
           <el-radio-group v-model="editform.sex">
-            <el-radio label="男" @change="change">男</el-radio>
-            <el-radio label="女" @change="change">女</el-radio>
+            <el-radio label="男">男</el-radio>
+            <el-radio label="女">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="年龄：" prop="age">
@@ -186,7 +186,6 @@
             clearable
             placeholder="请选择"
             size="samll"
-            @change="change"
           >
             <el-option
               v-for="item in roles"
@@ -288,7 +287,7 @@
       layout="total,sizes, prev, pager, next, jumper"
       :total="total"
       :page-sizes="[3, 5, 7, 10, 12]"
-      :page-size="pagesize"
+      :page-size.sync="pagesize"
       :current-page.sync="currentPage"
     >
     </el-pagination>
@@ -301,7 +300,10 @@ import {
   UserAdd,
   UserEdit,
   UserDelete,
-} from "@/api/getData";
+  getRole,
+  setRole,
+} from "@/api/getUserData";
+import { roleList } from "@/api/getSystemData";
 import axios from "axios";
 export default {
   data() {
@@ -372,6 +374,7 @@ export default {
         page: "",
         size: 3,
       },
+
       //编辑用户表单信息
       editform: {},
       //角色表单
@@ -401,7 +404,7 @@ export default {
       //表格信息
       tableData: [],
       // 分页信息
-      currentPage: null,
+      currentPage: 1,
       pagesize: 7,
       total: null,
       //角色信息
@@ -409,15 +412,22 @@ export default {
     };
   },
   created() {
-    let _this = this;
-    UserList(this.pagesize).then((resp) => {
-      console.log(resp.data);
-      _this.tableData = resp.data.records;
-      _this.pagesize = resp.data.pagesize;
-      _this.total = resp.data.total;
-    });
+    this.getUserList();
   },
   methods: {
+    getUserList() {
+      UserList({
+        currentPage: this.currentPage,
+        pagesize: this.pagesize,
+      })
+        .then((resp) => {
+          console.log(resp.data);
+          this.tableData = resp.data.records;
+          this.pagesize = resp.data.pagesize;
+          this.total = resp.data.total;
+        })
+        .catch((err) => {});
+    },
     //关闭弹框
     handleClose(done) {
       this.$confirm("确认关闭？", {
@@ -438,6 +448,11 @@ export default {
         _this.total = resp.data.total;
         _this.pagesize = resp.data.pagesize;
       });
+    },
+    //重置
+    resetList() {
+      //重新加载用户列表界面
+      location.reload();
     },
     // 增加用户提交表单内容
     addSubmit(formName) {
@@ -541,22 +556,20 @@ export default {
     setRole(row) {
       this.id = row.id;
       console.log(row.id);
-      let _this = this;
       //展示角色设置弹框
       this.dialogFormVisible3 = true;
       //通过用户id来获取当前用户角色
-      axios
-        .get(
-          this.$store.state.globalhost + "roleUser/getRoleByUserId/" + row.id
-        )
+      getRole(row.id)
         .then((resp) => {
-          _this.roleform.roleId = resp.data.roleId;
-          console.log(_this.roleform.roleId);
-        });
+          this.roleform.roleId = resp.roleId;
+        })
+        .catch(() => {});
       //获取角色信息
-      axios.get(this.$store.state.globalhost + "role/list").then((resp) => {
-        _this.roles = resp.data;
-      });
+      roleList()
+        .then((resp) => {
+          this.roles = resp;
+        })
+        .catch(() => {});
     },
     //设置角色
     roleSubmit(formName) {
@@ -574,10 +587,10 @@ export default {
         .then(() => {
           _this.$refs[formName].validate((valid) => {
             if (valid) {
-              axios
-                .put(_this.$store.state.globalhost + "roleUser/updateRole", obj)
+              axios;
+              setRole(obj)
                 .then((resp) => {
-                  if (resp.data) {
+                  if (resp) {
                     _this.$message({
                       showClose: true,
                       message: "角色设置成功",
@@ -586,7 +599,8 @@ export default {
                     _this.dialogFormVisible3 = false;
                     location.reload;
                   }
-                });
+                })
+                .catch((err) => {});
             } else {
               _this.$message({
                 type: "error",
@@ -606,77 +620,40 @@ export default {
       this.dialogFormVisible = false;
       this.$refs[formName].resetFields();
     },
-    change() {
-      // console.log(this.rolefrom.roleName);
-      // console.log(this.rolefrom.roleId);
-    },
-
     //分页-改变页
     pageChange() {
-      const _this = this;
       //判断是否为搜索状态
       if (this.searchform.username == "" && this.searchform.age == "") {
         //如果不是搜索状态执行所有用户分页
-        axios
-          .get(
-            this.$store.state.globalhost +
-              "user/list/?page=" +
-              this.currentPage +
-              "&size=" +
-              this.pagesize
-          )
-          .then(function (resp) {
-            console.log(resp.data);
-            _this.tableData = resp.data.records;
-            _this.pagesize = resp.data.pagesize;
-            _this.total = resp.data.total;
-          });
+        this.getUserList();
       } else {
         //如果是搜索状态，执行搜索结果的分页
-        _this.searchform.page = _this.currentPage;
-        axios
-          .get(this.$store.state.globalhost + "user/search", {
-            params: this.searchform,
-          })
-          .then(function (resp) {
-            _this.tableData = resp.data.records;
-            _this.total = resp.data.total;
+        this.searchform.page = _this.currentPage;
+        UserSearch(this.searchform)
+          .then((resp) => {
+            this.tableData = resp.data.records;
+            this.total = resp.data.total;
             console.log(resp.data);
-          });
+          })
+          .catch((err) => {});
       }
     },
     //分页-改变页大小
     sizeChange() {
-      const _this = this;
       //判断是否为搜索状态
       if (this.searchform.username == "" && this.searchform.age == "") {
         //如果不是搜索状态执行改变所有用户的页大小
-        axios
-          .get(
-            this.$store.state.globalhost +
-              "user/list/?page=" +
-              this.currentPage +
-              "&size=" +
-              this.pagesize
-          )
-          .then(function (resp) {
-            console.log(resp.data);
-            _this.tableData = resp.data.records;
-            _this.pagesize = resp.data.pagesize;
-            _this.total = resp.data.total;
-          });
+        this.getUserList();
       } else {
         //如果是搜索状态，改变搜索结果的页大小
         _this.searchform.size = _this.pagesize;
-        axios
-          .get(this.$store.state.globalhost + "user/search", {
-            params: this.searchform,
-          })
-          .then(function (resp) {
-            _this.tableData = resp.data.records;
-            _this.total = resp.data.total;
+        UserSearch(this.searchform)
+          .then((resp) => {
+            this.tableData = resp.data.records;
+            this.total = resp.data.total;
             console.log(resp.data);
-          });
+          })
+          .catch((err) => {});
       }
     },
   },

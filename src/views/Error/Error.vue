@@ -51,8 +51,8 @@ export default {
   //   },
   methods: {
     relogin() {
-      this.$router.push({ path: "/login" });
       localStorage.removeItem("access-admin");
+      this.$router.push({ path: "/login" });
     },
   },
 };
