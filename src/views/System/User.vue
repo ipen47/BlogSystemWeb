@@ -6,10 +6,10 @@
       <!-- 搜索查询部分 -->
       <el-form
         :inline="true"
-        style="height: 40px;width200px; display: flex"
+        style="height: 40px; width200px; font-weight: bold ;display: flex"
         :model="searchform"
       >
-        <el-form-item style="display: flex; margin-left: 30px" label="姓名：">
+        <el-form-item style="display: flex; margin-left: 10px" label="姓名：">
           <el-input
             size="medium"
             placeholder="请输入用户姓名"

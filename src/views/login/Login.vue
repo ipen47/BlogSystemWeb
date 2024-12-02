@@ -2,7 +2,7 @@
   <div class="login-page">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span class="login-title">🔐后台管理系统</span>
+        <span class="login-title">🔐花蓉博客管理系统</span>
       </div>
       <div class="login-form">
         <el-form :model="form" :rules="loginRules" ref="loginForm">
@@ -74,6 +74,7 @@
 <script>
 import { login } from "@/api/login";
 import { getCodeImg } from "@/api/captcha";
+import { getNewNotice } from "@/api/notice";
 export default {
   name: "Login",
 
@@ -146,6 +147,16 @@ export default {
                     JSON.stringify(resp.data)
                   );
                   this.$router.push("/");
+                  //获取最新公告
+                  getNewNotice().then((resp) => {
+                    this.$alert(
+                      `${resp.data.noticeContent}`,
+                      `${resp.data.noticeTitle}`,
+                      {
+                        confirmButtonText: "确定",
+                      }
+                    );
+                  });
                 }
               })
               .catch(function (error) {

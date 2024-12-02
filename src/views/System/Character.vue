@@ -1,14 +1,62 @@
 <template>
   <div>
-    <!-- 增加角色按钮 -->
-    <el-button
-      style="margin-left: 10px"
-      size="medium"
-      type="success"
-      icon="el-icon-circle-plus"
-      @click="dialogFormVisible = true"
-      >添加角色</el-button
+    <!-- 搜索查询部分 -->
+    <el-form
+      :inline="true"
+      style="height: 40px; width200px; font-weight: bold ;display: flex"
+      :model="searchform"
     >
+      <el-form-item label="角色：">
+        <el-input
+          size="medium"
+          placeholder="请输入角色名称"
+          v-model="searchform.roleName"
+          clearable
+        >
+        </el-input>
+      </el-form-item>
+      <el-form-item label="创建时间：">
+        <el-date-picker
+          v-model="searchform.createTime"
+          type="daterange"
+          size="medium"
+          style="width: 300px"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-button
+        type="primary"
+        plain
+        icon="el-icon-search"
+        size="small"
+        style="margin: 5px"
+        @click="query"
+        >查询</el-button
+      >
+      <el-button
+        plain
+        icon="el-icon-refresh-right"
+        size="small"
+        style="margin: 5px 10px"
+        @click="restSearch"
+        >重置</el-button
+      >
+      <!-- 增加角色按钮 -->
+      <el-button
+        style="margin: 5px 10px"
+        size="small"
+        type="success"
+        plain
+        icon="el-icon-circle-plus"
+        @click="dialogFormVisible = true"
+        >添加角色</el-button
+      >
+    </el-form>
+
     <!-- 角色信息列表 -->
     <el-table
       :data="
@@ -176,6 +224,8 @@ export default {
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
+      //查询参数
+      searchform: "",
       //增加角色表单信息
       roleform: {
         roleId: "",
@@ -217,6 +267,13 @@ export default {
           this.total = resp.data.total;
         })
         .catch((err) => {});
+    },
+    query() {
+      this.$message.error("暂未开发，敬请期待^-^");
+    },
+    restSearch() {
+      //重新加载菜单列表界面
+      location.reload();
     },
     //关闭弹框
     handleClose(done) {
