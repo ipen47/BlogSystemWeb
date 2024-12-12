@@ -15,8 +15,10 @@ const menu = {
     async loadMenu({ commit }, RoleId) {
       let res = await createMenu({ roleId: RoleId });
       console.log("res", res);
-      commit("SET_MENU", res.data);
-      addDynamicRoutes(res.data);
+      if (res) {
+        commit("SET_MENU", res.data);
+        addDynamicRoutes(res.data);
+      }
     },
   },
 };

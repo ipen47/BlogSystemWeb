@@ -1,6 +1,7 @@
 import router from "@/router/index";
 import store from "@/store";
-let whitelist = ["/login", "/register", "/error"];
+let whitelist = ["/login", "/regist", "/error", "/", "/index"];
+import { Message } from "element-ui";
 // 导航守卫
 router.beforeEach(async (to, from, next) => {
   console.log("来自哪里：", from.path);
@@ -11,8 +12,6 @@ router.beforeEach(async (to, from, next) => {
     //已登录
     if (to.path === "/login") {
       next("/");
-    } else if (whitelist.indexOf(to.path) !== -1) {
-      next();
     } else {
       if (!store.state.user.roleId) {
         //获取用户信息
@@ -32,10 +31,10 @@ router.beforeEach(async (to, from, next) => {
   } else {
     // 未登录用户
     if (whitelist.indexOf(to.path) !== -1) {
-      // 允许访问登录和注册页面
+      // 允许访问首页、登录和注册页面
       next();
     } else {
-      // 重定向到登录页
+      Message("请先登录！");
       next("/login");
     }
   }

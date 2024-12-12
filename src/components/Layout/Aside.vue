@@ -3,7 +3,7 @@
     <el-menu
       router
       unique-opened
-      default-active="/"
+      default-active="/vip/index"
       class="el-menu-vertical-demo"
       :collapse="isCollapse"
     >
@@ -39,6 +39,7 @@ export default {
 <style scoped>
 .el-aside {
   background-color: #d6e3f0;
+  height: 100%;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;

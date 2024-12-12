@@ -7,6 +7,7 @@
       :mode="mode"
     />
     <Editor
+      class="edit"
       style="height: 500px; overflow-y: hidden"
       v-model="html"
       :defaultConfig="editorConfig"
@@ -24,7 +25,7 @@ export default Vue.extend({
   data() {
     return {
       editor: null,
-      html: "<p>hello</p>",
+      html: "",
       toolbarConfig: {},
       editorConfig: { placeholder: "请输入内容..." },
       mode: "default", // or 'simple'
@@ -37,9 +38,7 @@ export default Vue.extend({
   },
   mounted() {
     // 模拟 ajax 请求，异步渲染编辑器
-    setTimeout(() => {
-      this.html = "<p>模拟 Ajax 异步设置内容 HTML</p>";
-    }, 1500);
+    setTimeout(() => {}, 1500);
   },
   beforeDestroy() {
     const editor = this.editor;
@@ -48,5 +47,7 @@ export default Vue.extend({
   },
 });
 </script>
-<style src="@wangeditor/editor/dist/css/style.css"></style>
-;
+<style scoped>
+@import "@wangeditor/editor/dist/css/style.css";
+@import "@/assets/css/editorView.css";
+</style>

@@ -6,7 +6,7 @@
     <p class="title">Oh no!!</p>
     <p class="subtitle">页面未找到<br />试一试重新登录一下咯。</p>
     <div align="center">
-      <a class="btn-back">返回</a>
+      <a class="btn-back" @click="$router.back()">返回</a>
     </div>
     <img src="../assets/404/astronaut.svg" class="astronaut" />
     <img src="../assets/404/spaceship.svg" class="spaceship" />

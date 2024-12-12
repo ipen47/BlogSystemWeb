@@ -49,6 +49,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .el-footer {
@@ -56,5 +57,6 @@ export default {
   color: rgb(248, 243, 243);
   text-align: center;
   line-height: 60px;
+  height: 300px;
 }
 </style>

@@ -23,16 +23,64 @@ const constantRoutes = [
     name: "注册",
     component: () => import("@/views/login/Regist.vue"),
   },
-  // 默认跳转到首页
+  // 默认跳转到前台首页
   {
     path: "/",
     redirect: "/index",
+    name: "前台",
+    component: () => import("@/views/FrontView/FrontLayout"),
+    children: [
+      {
+        path: "/index",
+        name: "首页",
+        component: () => import("@/views/FrontView/IndexView/Index"),
+      },
+      {
+        path: "/hotArticle",
+        name: "热门文章",
+        component: () => import("@/views/FrontView/HotArticle"),
+      },
+      {
+        path: "/news",
+        name: "新闻资讯",
+        component: () => import("@/views/FrontView/News"),
+      },
+      {
+        path: "/peopleCenter",
+        name: "个人中心",
+        component: () => import("@/views/FrontView/UserCenter"),
+      },
+    ],
+  },
+  {
+    name: "发布文章",
+    path: "/edit",
+    component: () => import("@/views/FrontView/IndexView/EditArticle"),
+  },
+  {
+    name: "文章详情",
+    path: "/detail",
+    component: () => import("@/views/FrontView/IndexView/ArticleDetail"),
+  },
+
+  {
+    path: "/home",
+    redirect: "/vip/index",
     name: "root",
     component: () => import("@/views/LayoutView.vue"),
     meta: {
       title: "首页",
     },
-    children: [], // 动态路由将挂载到这里
+    children: [
+      {
+        path: "/userCenter",
+        name: "个人中心",
+        component: () => import("@/views/userCenter/Index.vue"),
+        meta: {
+          title: "个人中心",
+        },
+      },
+    ], // 动态路由将挂载到这里
   },
 ];
 //解决重复触发了同一个路由。

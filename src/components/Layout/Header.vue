@@ -13,10 +13,6 @@
         >{{ item.meta.title }}</el-breadcrumb-item
       >
     </el-breadcrumb>
-    <svg-icon icon-class="github" style="margin-left: auto" />
-    gitHub
-    <svg-icon icon-class="wechat" style="margin-left: 20px" />
-    wechat
     <!-- 下拉菜单 -->
     <el-dropdown>
       <span class="el-dropdown-link">
@@ -25,15 +21,16 @@
         ><i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <router-link to="/welcome"
-          ><el-dropdown-item>个人中心</el-dropdown-item></router-link
+        <router-link to="/userCenter"
+          ><el-dropdown-item icon="el-icon-user"
+            >个人中心</el-dropdown-item
+          ></router-link
         >
-
-        <el-dropdown-item
-          class="icon el-icon-switch-button"
-          @click.native="LogOut"
+        <el-dropdown-item icon="el-icon-thumb" @click.native="loginIndex">
+          返回前台</el-dropdown-item
         >
-          退出</el-dropdown-item
+        <el-dropdown-item icon=" el-icon-switch-button" @click.native="LogOut">
+          退出登录</el-dropdown-item
         >
       </el-dropdown-menu>
     </el-dropdown>
@@ -58,7 +55,7 @@ export default {
     breadcrumbList() {
       let matched = this.$route.matched;
       console.log("matched:", matched);
-      matched[0].path = "/";
+      // matched[0].path = "/home";
       let invaildList = globalConfig.invaildRoutes;
       //失效路由名单
       //循环将不用跳转的路由置为空
@@ -82,6 +79,14 @@ export default {
     },
     change() {
       this.$emit("changeshow");
+    },
+    //返回前台页面
+    loginIndex() {
+      this.$router.push("/");
+      this.$message({
+        message: "欢迎回来",
+        type: "success",
+      });
     },
     //退出登录
     LogOut() {
@@ -115,11 +120,7 @@ export default {
   text-align: center;
   line-height: 60px;
 }
-.icon {
-  margin-left: 0;
-  font-size: 15px;
-  cursor: pointer;
-}
+
 .el-breadcrumb {
   margin-left: 5px;
 }

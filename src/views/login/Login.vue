@@ -74,7 +74,7 @@
 <script>
 import { login } from "@/api/login";
 import { getCodeImg } from "@/api/captcha";
-import { getNewNotice } from "@/api/notice";
+
 export default {
   name: "Login",
 
@@ -136,9 +136,8 @@ export default {
 
                 if (resp.code == 200) {
                   //成功提示
-                  this.$notify({
-                    title: "登录成功",
-                    message: `欢迎~~${resp.data.name}`,
+                  this.$message({
+                    message: "登录成功！",
                     type: "success",
                   });
                   //保存当前用户信息
@@ -147,16 +146,6 @@ export default {
                     JSON.stringify(resp.data)
                   );
                   this.$router.push("/");
-                  //获取最新公告
-                  getNewNotice().then((resp) => {
-                    this.$alert(
-                      `${resp.data.noticeContent}`,
-                      `${resp.data.noticeTitle}`,
-                      {
-                        confirmButtonText: "确定",
-                      }
-                    );
-                  });
                 }
               })
               .catch(function (error) {
