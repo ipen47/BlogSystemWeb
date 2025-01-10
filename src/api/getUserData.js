@@ -32,7 +32,7 @@ export function UserEdit(data) {
     data: data,
   });
 }
-//修改用户信息
+//删除用户信息
 export function UserDelete(parm) {
   return request({
     url: "user/deleteUser/" + parm,

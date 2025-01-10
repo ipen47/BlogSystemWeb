@@ -34,8 +34,7 @@ router.beforeEach(async (to, from, next) => {
       // 允许访问首页、登录和注册页面
       next();
     } else {
-      Message("请先登录！");
-      next("/login");
+      Message.info("请先登录！");
     }
   }
 });

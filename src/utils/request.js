@@ -45,7 +45,7 @@ service.interceptors.response.use(
     // 隐藏 Loading 效果
     setTimeout(() => {
       loadingInstance.close();
-    }, 1000);
+    }, 500);
     let code = response.data.code || 200;
     let msg = response.data.msg || "未知错误";
     if (code === 401) {
@@ -53,12 +53,12 @@ service.interceptors.response.use(
       localStorage.removeItem("access-admin");
       Message.info("token已过期,请重新登录");
       router.push("/error");
-      // return Promise.reject("无效的会话，或者会话已过期，请重新登录。");
+      return Promise.reject(msg);
     }
     // if (code === 403) {
     //   //未登录，无权限访问
     //   router.push("/login");
-    //   Message.info("请先登录！!!");
+    //   Message.info("请先登录！");
     //   return Promise.reject();
     // }
     // if (code == 404) {
@@ -68,7 +68,7 @@ service.interceptors.response.use(
     else if (code == 500) {
       console.log("500");
       Message.error("系统未知错误，请联系管理员");
-      return Promise.reject(new Error(msg));
+      return Promise.reject(msg);
     } else if (code === -1 || code === -2) {
       //-2代码验证码出错
       // 使用 Notification 显示错误提示，并保存实例

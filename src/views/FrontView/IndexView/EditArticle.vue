@@ -14,16 +14,13 @@
     <div id="content">
       <div id="editor-container">
         <div id="title-container">
-          <input
-            placeholder="请输入文章标题（1~50字）"
-            v-model="form.pageTitle"
-          />
+          <input placeholder="请输入文章标题（1~50字）" v-model="form.title" />
         </div>
         <div id="editor-text-area">
           <Editor
             class="edit"
             style="height: 500px; overflow-y: hidden"
-            v-model="form.contentHtml"
+            v-model="form.content"
             :defaultConfig="editorConfig"
             :mode="mode"
             @onCreated="onCreated"
@@ -31,22 +28,48 @@
         </div>
       </div>
       <div class="sub_form">
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :rules="rules" :model="form" label-width="80px">
           <el-form-item label="文章标签">
-            <el-button size="small" icon="el-icon-plus">选择标签</el-button>
+            <el-tag
+              :key="tag"
+              v-for="tag in dynamicTags"
+              closable
+              size="small"
+              :disable-transitions="false"
+              @close="handleClose(tag)"
+            >
+              {{ tag }}
+            </el-tag>
+            <el-input
+              class="input-new-tag"
+              v-if="inputVisible"
+              v-model="inputValue"
+              ref="saveTagInput"
+              size="medium"
+              @keyup.enter.native="handleInputConfirm"
+              @blur="handleInputConfirm"
+            >
+            </el-input>
+            <el-button
+              v-else
+              class="button-new-tag"
+              size="small"
+              @click="showInput"
+              >+ 添加文章标签</el-button
+            >
           </el-form-item>
           <el-form-item label="添加封面">
             <el-upload
+              action="#"
               class="article-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
+              :http-request="uploadImg"
               :on-success="handleArticleSuccess"
               :before-upload="beforeArticleUpload"
             >
               <img
                 v-if="form.articleImage"
                 :src="form.articleImage"
-                class="article"
+                class="articleImg"
               />
               <i v-else class="el-icon-plus article-uploader-icon"
                 >添加文章封面</i
@@ -58,17 +81,17 @@
               type="textarea"
               :rows="2"
               placeholder="摘要：会在推荐、列表等场景外露，帮助读者快速了解内容"
-              v-model="form.abstract"
+              v-model="form.summary"
             >
             </el-input
           ></el-form-item>
-          <el-form-item label="文章分类">
-            <el-select v-model="value" clearable placeholder="请选择">
+          <el-form-item label="文章分类" prop="categoryId">
+            <el-select v-model="form.categoryId" clearable placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in categoryOptions"
+                :key="item.categoryId"
+                :label="item.categoryName"
+                :value="item.categoryId"
               >
               </el-option>
             </el-select>
@@ -102,6 +125,9 @@
 import Vue from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import CommentNav from "@/components/Front/CommenNav.vue";
+import { getAllCategories } from "@/api/category";
+import { uploadArticleImg } from "@/api/upload";
+import { saveBlog } from "@/api/articles";
 export default Vue.extend({
   components: {
     CommentNav,
@@ -111,30 +137,18 @@ export default Vue.extend({
   data() {
     return {
       form: {
-        // name: "",
-        // region: "",
-        // date1: "",
-        // date2: "",
-        // delivery: false,
-        // type: [],
-        // resource: "",
-        // desc: "",
+        articleImage: "",
       },
-      options: [
-        {
-          value: "HTML",
-          label: "HTML",
-        },
-        {
-          value: "CSS",
-          label: "CSS",
-        },
-        {
-          value: "JavaScript",
-          label: "JavaScript",
-        },
-      ],
-      value: [],
+      // 表单校验
+      rules: {
+        categoryId: [
+          { required: true, message: "请设置文章标签", trigger: "blur" },
+        ],
+      },
+      categoryOptions: [],
+      dynamicTags: [],
+      inputVisible: false,
+      inputValue: "",
 
       editor: null,
 
@@ -179,36 +193,128 @@ export default Vue.extend({
       mode: "default",
     };
   },
-
+  created() {
+    this.loadCategory();
+  },
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
     },
+    //获取分类数据
+    loadCategory() {
+      getAllCategories()
+        .then((res) => {
+          console.log(res);
+          this.categoryOptions = res;
+        })
+        .catch((err) => {});
+    },
     publishBlog() {
-      console.log(this.form);
+      console.log("form", this.form);
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.form.status = 1; //设置状态为已发布
+          saveBlog(this.form)
+            .then((res) => {
+              if (res.msg == "success") {
+                this.$message({
+                  type: "success",
+                  message: "发布成功",
+                });
+                this.$router.push("/index");
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "发布失败",
+                });
+              }
+            })
+            .catch((err) => {});
+        }
+      });
 
-      this.$message.error("暂未开发，敬请期待^-^");
+      // this.$message.error("暂未开发，敬请期待^-^");
     },
     saveDraft() {
-      this.$message.error("暂未开发，敬请期待^-^");
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          this.form.status = 0; //设置状态为草稿
+          // this.$message.error("暂未开发，敬请期待^-^");
+          saveBlog(this.form)
+            .then((res) => {
+              if (res.msg == "success") {
+                this.$message({
+                  type: "success",
+                  message: "保存成功",
+                });
+                this.$router.push("/index");
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "保存失败",
+                });
+              }
+            })
+            .catch((err) => {});
+        }
+      });
+
+      // this.$message.error("暂未开发，敬请期待^-^");
     },
     schedulePublish() {
       this.$message.error("暂未开发，敬请期待^-^");
     },
     //上传封面
-    handleArticleSuccess(res, file) {
-      this.articleImage = URL.createObjectURL(file.raw);
+    uploadImg(option) {
+      const formData = new FormData();
+      formData.append("file", option.file); // 添加上传的文件
+
+      uploadArticleImg(formData)
+        .then((response) => {
+          // 调用成功回调
+          option.onSuccess(response, option.file);
+        })
+        .catch((error) => {
+          // 调用失败回调
+          option.onError(error);
+        });
     },
+    //上传成功后
+    handleArticleSuccess(res, file) {
+      console.log("file", file);
+      this.form.articleImage = res;
+      console.log(this.form.articleImage);
+    },
+    //上传成功前
     beforeArticleUpload(file) {
-      // const isJPG = file.type === "image/jpeg";
-      // const isLt2M = file.size / 1024 / 1024 < 2;
-      // if (!isJPG) {
-      //   this.$message.error("上传头像图片只能是 JPG 格式!");
-      // }
-      // if (!isLt2M) {
-      //   this.$message.error("上传头像图片大小不能超过 2MB!");
-      // }
-      // return isJPG && isLt2M;
+      const isJPG = file.type === "image/jpeg" || "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick((_) => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+
+    handleInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = "";
     },
   },
   mounted() {
@@ -268,7 +374,7 @@ export default Vue.extend({
 /* 提交表单样式 */
 .sub_form {
   width: 850px;
-  height: 300px;
+  height: 400px;
   margin: 20px auto;
   background-color: #fff;
   padding: 20px 50px 50px 50px;
@@ -299,9 +405,25 @@ export default Vue.extend({
   line-height: 90px;
   text-align: center;
 }
-.article {
-  width: 178px;
-  height: 178px;
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 26px;
+  line-height: 26px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  height: 26px;
+  width: 100px;
+  margin-left: 10px;
+  /* vertical-align: bottom; */
+}
+.articleImg {
+  width: 140px;
+  height: 80px;
   display: block;
 }
 /* 底部样式 */

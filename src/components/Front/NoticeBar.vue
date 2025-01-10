@@ -5,7 +5,7 @@
       <!--图标-->
       <span> <svg-icon icon-class="notice2" /></span>&nbsp;&nbsp;
       <!--名字-->
-      <span class="announcement">系统公告：</span>&nbsp;
+      <span class="announcement">系统通知：</span>&nbsp;
     </div>
     <!--公告展示块-->
     <div class="PackagingShell" id="PackagingShell">
@@ -34,8 +34,8 @@ export default {
   },
   methods: {
     init() {
-      //获取最新公告
-      getNewNotice()
+      //获取最新通知
+      getNewNotice({ noticeType: 1 })
         .then((resp) => {
           this.text = resp.data.noticeContent;
         })

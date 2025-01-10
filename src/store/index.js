@@ -1,12 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import router from "@/router/index";
 import menu from "@/store/modules/menu";
 import user from "@/store/modules/user";
 
 Vue.use(Vuex);
 export default new Vuex.Store({
   modules: { menu, user },
+  getters: {
+    token(state) {
+      return state.user.token;
+    },
+    userId(state) {
+      return state.user.userInfo.userId;
+    },
+  },
   actions: {
     // 退出系统
     LogOut({ commit, state }) {
@@ -20,5 +27,4 @@ export default new Vuex.Store({
       });
     },
   },
-  // 方法：移除指定路由
 });

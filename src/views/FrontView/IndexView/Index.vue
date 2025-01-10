@@ -4,7 +4,7 @@
     <carousel></carousel>
     <el-row :gutter="20">
       <!-- 左边分类部分 -->
-      <el-col :span="5"
+      <el-col :span="3"
         ><div class="article_type_nav">
           <span style="font-size: 20px; margin-right: auto">分类</span>
           <span
@@ -14,22 +14,23 @@
               font-size: 12px;
               cursor: pointer;
             "
+            @click="$router.push('/articleCategory')"
             >更多 <i class="el-icon-d-arrow-right"></i
           ></span>
         </div>
-        <div class="article_type_info">
-          <div v-for="item in typeList" :key="item.id">
-            <el-image
-              fit="cover"
-              :src="item.articleImage"
-              style="width: 250px; height: 140px"
-            >
-            </el-image>
+        <div class="article_type_info" style="width: 150px; margin: 10px auto">
+          <div
+            class="type_item"
+            v-for="item in categoryList"
+            :key="item.categoryId"
+            @click="$router.push('/articleCategory')"
+          >
+            {{ item.categoryName }}
           </div>
         </div>
       </el-col>
       <!-- 中间博客部分 -->
-      <el-col :span="14"
+      <el-col :span="16"
         ><div class="article_content_nav">
           <div
             class="nav_item"
@@ -56,11 +57,8 @@
           >
         </div>
         <div class="article_content_info">
-          <div v-for="item in articleList" :key="item.id">
-            <div
-              class="article_card"
-              @click="$router.push(`/detail?id=${item.id}`)"
-            >
+          <div v-for="item in articleList" :key="item.articleId">
+            <div class="article_card" @click="loadDetailsById(item.articleId)">
               <!-- 文章封面 -->
               <el-image
                 fit="cover"
@@ -79,24 +77,22 @@
                   class="article_content"
                   style="margin: 10px 0px; font-size: 12px"
                 >
-                  {{ item.content }}
+                  {{ item.summary }}
                 </div>
                 <!-- 文章数据 -->
                 <div
                   style="display: flex; align-items: center; margin: 12px 0px"
                 >
-                  <el-tag type="success" size="mini">{{
-                    item.category
-                  }}</el-tag>
+                  <el-tag type="success" size="mini">{{ tag }}</el-tag>
                   <i
                     class="el-icon-date"
                     style="font-size: 12px; margin-left: 10px"
-                    >{{ item.createTime }}</i
+                    >{{ item.createdTime }}</i
                   >
                   <i
                     class="el-icon-user"
                     style="font-size: 12px; margin-left: 10px"
-                    >作者：{{ item.user }}</i
+                    >作者：{{ item.userName }}</i
                   >
                   <i
                     class="el-icon-view"
@@ -105,7 +101,7 @@
                   >
 
                   <span style="font-size: 12px; margin-left: 10px">
-                    <svg-icon icon-class="like3" />{{ item.likes }}</span
+                    <svg-icon icon-class="like3" />{{ item.likesCount }}</span
                   >
                 </div>
               </div>
@@ -197,6 +193,8 @@
 <script>
 import Carousel from "@/components/Front/Carousel.vue";
 import BackTop from "@/components/Front/BackTop";
+import { getArticleBySort } from "@/api/articles";
+import { getAllCategories } from "@/api/category";
 export default {
   name: "ArticleIndex",
   components: {
@@ -208,64 +206,8 @@ export default {
       //定义文章排序规则：hot:热度；new:时间
       sort: "hot",
       //文章数据
-      articleList: [
-        {
-          id: 1,
-          title:
-            "Python 语法及入门 （超全超详细） 专为Python零基础 一篇博客让你完全掌握Python语法",
-          content:
-            "Python由荷兰国家数学与计算机科学研究中心的吉多·范罗苏姆于1990年代初设计，作为一门叫做ABC语言的替代品。 Python提供了高效的高级数据结构，还能简单有效地面向对象编程,随着版本的不断更新和语言新功能的添加，逐渐被用于独立的、大型项目的开发,Python由荷兰国家数学与计算机科学研究中心的吉多·范罗苏姆于1990年代初设计，作为一门叫做ABC语言的替代品。 Python提供了高效的高级数据结构，还能简单有效地面向对象编程,随着版本的不断更新和语言新功能的添加，逐渐被用于独立的、大型项目的开发",
-          category: "编程",
-          user: "吉多·范罗苏姆",
-          viewsCount: 200,
-          likes: 50,
-          createTime: "2024年12月02日",
-          articleImage:
-            "https://peng12.oss-cn-beijing.aliyuncs.com/Blog/%E6%96%87%E7%AB%A0%E5%B0%81%E9%9D%A2/article07.png",
-        },
-        {
-          id: 2,
-          title:
-            "Python 语法及入门 （超全超详细） 专为Python零基础 一篇博客让你完全掌握Python语法",
-          content:
-            "Python由荷兰国家数学与计算机科学研究中心的吉多·范罗苏姆于1990年代初设计，作为一门叫做ABC语言的替代品。 Python提供了高效的高级数据结构，还能简单有效地面向对象编程,随着版本的不断更新和语言新功能的添加，逐渐被用于独立的、大型项目的开发",
-          category: "编程",
-          user: "吉多·范罗苏姆",
-          viewsCount: 200,
-          createTime: "2024年12月02日",
-          likes: 50,
-          articleImage:
-            "https://peng12.oss-cn-beijing.aliyuncs.com/Blog/%E6%96%87%E7%AB%A0%E5%B0%81%E9%9D%A2/article06.png",
-        },
-        {
-          id: 3,
-          title:
-            "Python 语法及入门 （超全超详细） 专为Python零基础 一篇博客让你完全掌握Python语法",
-          content:
-            "Python由荷兰国家数学与计算机科学研究中心的吉多·范罗苏姆于1990年代初设计，作为一门叫做ABC语言的替代品。 Python提供了高效的高级数据结构，还能简单有效地面向对象编程,随着版本的不断更新和语言新功能的添加，逐渐被用于独立的、大型项目的开发",
-          category: "编程",
-          user: "吉多·范罗苏姆",
-          viewsCount: 200,
-          likes: 50,
-          createTime: "2024年12月02日",
-          articleImage:
-            "https://peng12.oss-cn-beijing.aliyuncs.com/Blog/%E6%96%87%E7%AB%A0%E5%B0%81%E9%9D%A2/article16.jpeg",
-        },
-        {
-          id: 4,
-          title:
-            "Python 语法及入门 （超全超详细） 专为Python零基础 一篇博客让你完全掌握Python语法",
-          content:
-            "Python由荷兰国家数学与计算机科学研究中心的吉多·范罗苏姆于1990年代初设计，作为一门叫做ABC语言的替代品。 Python提供了高效的高级数据结构，还能简单有效地面向对象编程,随着版本的不断更新和语言新功能的添加，逐渐被用于独立的、大型项目的开发",
-          category: "编程",
-          user: "吉多·范罗苏姆",
-          viewsCount: 200,
-          likes: 50,
-          createTime: "2024年12月02日",
-          articleImage:
-            "https://peng12.oss-cn-beijing.aliyuncs.com/Blog/%E6%96%87%E7%AB%A0%E5%B0%81%E9%9D%A2/article17.jpg",
-        },
-      ],
+      articleList: [],
+      tag: "编程",
       //排行榜数据
       rankList: [
         {
@@ -289,12 +231,17 @@ export default {
           title: "你的代码不堪一击！太烂了！",
         },
       ],
-      typeList: [],
+      //分类数据
+      categoryList: [],
       // 分页信息
       currentPage: 1,
-      pagesize: 5,
-      total: 20,
+      pagesize: 4,
+      total: 0,
     };
+  },
+  created() {
+    this.loadBySort(this.sort);
+    this.loadCategory();
   },
   methods: {
     //进入发布文章界面
@@ -304,8 +251,39 @@ export default {
     //根据sort规则获取文章
     loadBySort(sort) {
       this.sort = sort;
+      let params = {
+        currentPage: this.currentPage,
+        pagesize: this.pagesize,
+        sort: sort,
+      };
+      getArticleBySort(params)
+        .then((res) => {
+          console.log(res.data);
+          this.total = res.data.total;
+          this.articleList = res.data.records;
+        })
+        .catch((err) => {});
     },
-    pageChange() {},
+    //获取分类数据
+    loadCategory() {
+      getAllCategories()
+        .then((res) => {
+          console.log(res);
+          this.categoryList = res.filter((item, index) => {
+            return index <= 4;
+          });
+        })
+        .catch((err) => {});
+    },
+    loadDetailsById(id) {
+      console.log("id", id);
+      localStorage.setItem("articleId", id);
+      this.$router.push(`/detail?id=${id}`);
+    },
+
+    pageChange() {
+      this.loadBySort();
+    },
   },
 };
 </script>
@@ -316,6 +294,21 @@ export default {
   padding: 12px;
   align-items: center;
   border-bottom: 1px solid #e7eaec;
+}
+
+.type_item {
+  text-align: center;
+  padding: 10px 0px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #666;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.type_item:hover {
+  background-color: #1890ff;
+  color: #fff;
+  border-radius: 5px;
 }
 .article_content_nav {
   display: flex;
@@ -361,7 +354,7 @@ export default {
   cursor: pointer;
 }
 .article_card:hover {
-  background: #d3e2e9;
+  background-color: #ecf5ff;
 }
 .text {
   margin-left: 20px;
@@ -386,9 +379,11 @@ export default {
   font-size: 12px;
   color: #666;
 }
+
 .recommend:hover {
-  background-color: #a9e4f4;
+  background-color: #ecf5ff;
   cursor: pointer;
+  color: #66b1ff;
 }
 .bottom {
   position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="tag">
+  <div class="category">
     <div class="search" style="font-weight: bold">
       <!-- 搜索查询部分 -->
       <el-form
@@ -7,11 +7,11 @@
         style="height: 20px width:100% display:flex"
         :model="searchform"
       >
-        <el-form-item label="标签:">
+        <el-form-item label="分类:">
           <el-input
             size="small"
-            placeholder="请输入标签名称"
-            v-model="searchform.tagName"
+            placeholder="请输入分类名称"
+            v-model="searchform.categpryName"
             clearable
           >
           </el-input>
@@ -80,17 +80,29 @@
     >
       <el-table-column type="selection" width="55" align="center">
       </el-table-column>
-      <el-table-column label="序号" align="center" prop="tagId" width="120" />
       <el-table-column
-        label="标签名称"
+        label="序号"
         align="center"
-        width="180px"
-        prop="tagName"
+        prop="categoryId"
+        width="100"
+      />
+      <el-table-column
+        label="分类名称"
+        align="center"
+        width="100px"
+        prop="categoryName"
       >
         <template slot-scope="scope">
-          <el-tag type="warning" size="small">{{ scope.row.tagName }}</el-tag>
+          <el-tag size="small">{{ scope.row.categoryName }}</el-tag>
         </template>
       </el-table-column>
+
+      <el-table-column
+        label="描述"
+        align="center"
+        width="240px"
+        prop="description"
+      />
       <el-table-column
         label="文章数量"
         align="center"
@@ -103,13 +115,13 @@
         prop="createdBy"
         width="120"
       />
+
       <el-table-column
         label="创建时间"
         align="center"
         prop="createdAt"
         width="180"
-      >
-      </el-table-column>
+      />
 
       <el-table-column
         label="操作"
@@ -148,22 +160,34 @@
       :current-page.sync="currentPage"
     >
     </el-pagination>
-    <!-- 添加或修改标签对话框 -->
+    <!-- 添加或修改分类对话框 -->
     <el-dialog
-      title="添加标签"
+      title="添加分类"
       :visible.sync="open"
-      width="500px"
+      width="780px"
       append-to-body
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="标签名称" prop="tagName">
+            <el-form-item label="分类名称" prop="categoryName">
               <el-input
-                v-model="form.tagName"
-                placeholder="请输入标签名称"
+                v-model="form.categoryName"
+                placeholder="请输入分类名称"
                 clearable
               />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="分类描述" prop="description"
+              ><el-input
+                clearable
+                type="textarea"
+                :rows="2"
+                placeholder="请输入内容"
+                v-model="form.description"
+              >
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -176,7 +200,12 @@
   </div>
 </template>
 <script>
-import { addTag, getTagPages, updateTag, deleteTag } from "@/api/tags";
+import {
+  getCategoryPages,
+  addCategory,
+  updateCategory,
+  deleteCategory,
+} from "@/api/category";
 export default {
   components: {},
   data() {
@@ -196,8 +225,11 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        tagName: [
-          { required: true, message: "标签名称不能为空", trigger: "blur" },
+        categoryName: [
+          { required: true, message: "分类名称不能为空", trigger: "blur" },
+        ],
+        description: [
+          { required: true, message: "分类描述不能为空", trigger: "blur" },
         ],
       },
       multipleSelection: [],
@@ -208,16 +240,16 @@ export default {
     };
   },
   created() {
-    this.getTagData();
+    this.getCategoryData();
   },
   methods: {
     //获取分类数据
-    getTagData() {
+    getCategoryData() {
       let params = {
         currentPage: this.currentPage,
         pagesize: this.pagesize,
       };
-      getTagPages(params)
+      getCategoryPages(params)
         .then((res) => {
           this.total = res.data.total;
           this.tableData = res.data.records;
@@ -233,30 +265,31 @@ export default {
       this.open = false;
       this.reset();
     },
+    //新增按钮
     handleAdd() {
       this.reset();
       this.open = true;
     },
+    //修改按钮
     handleUpdate(row) {
       this.form = row;
-
       this.open = true;
     },
     /**新增/修改-提交按钮 */
     submitForm() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          if (this.form.tagId != undefined) {
-            updateTag(this.form).then((response) => {
+          if (this.form.categoryId != undefined) {
+            updateCategory(this.form).then((response) => {
               this.$message({
                 type: "success",
                 message: "修改成功!",
               });
               this.open = false;
-              this.getTagData();
+              this.getCategoryData();
             });
           } else {
-            addTag(this.form).then((resp) => {
+            addCategory(this.form).then((resp) => {
               this.$message({
                 type: "success",
                 message: "添加成功!",
@@ -264,7 +297,7 @@ export default {
               //重新加载用户列表界面
 
               this.open = false;
-              this.getTagData();
+              this.getCategoryData();
             });
           }
         }
@@ -277,15 +310,15 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        deleteTag(row.tagId)
+        deleteCategory(row.categoryId)
           .then((res) => {
             if (res.msg == "success") {
               this.$message({
                 type: "success",
-                message: "【" + row.tagName + "】已删除",
+                message: "【" + row.categoryName + "】已删除",
               });
-              //重新加载用户列表界面
-              this.getTagData();
+              //重新加载界面
+              this.getCategoryData();
             }
           })
           .catch((err) => {});
@@ -314,7 +347,7 @@ export default {
 
       // }
       //如果不是搜索状态执行所有用户分页
-      this.getTagData();
+      this.getCategoryData();
     },
     //分页-改变页大小
     sizeChange() {
@@ -323,7 +356,7 @@ export default {
       //   //如果不是搜索状态执行改变所有用户的页大小
 
       // }
-      this.getTagData();
+      this.getCategoryData();
     },
   },
 };

@@ -190,7 +190,7 @@ export default {
       multipleSelection: [],
       // 分页信息
       currentPage: 1,
-      pagesize: 7,
+      pagesize: 5,
       total: null,
     };
   },
@@ -233,7 +233,7 @@ export default {
 
       // }
       //如果不是搜索状态执行所有用户分页
-      this.getLogData();
+      this.getOperData();
     },
     //分页-改变页大小
     sizeChange() {
@@ -242,7 +242,7 @@ export default {
       //   //如果不是搜索状态执行改变所有用户的页大小
 
       // }
-      this.getLogData();
+      this.getOperData();
     },
     //删除
     deleteLog() {

@@ -18,17 +18,27 @@
       </div>
       <el-dropdown style="margin-right: 40px">
         <span class="el-dropdown-link">
-          <el-avatar size="medium" :src="avatarUrl"></el-avatar>
+          <el-avatar size="medium" :src="userInfo.avatar"></el-avatar>
           <span style="margin-left: 11px; font-size: 14px; color: #666"
-            >消息</span
-          >
+            >消息<el-badge class="mark" is-dot
+          /></span>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>评论和@</el-dropdown-item>
-          <el-dropdown-item>赞和收藏</el-dropdown-item>
-          <el-dropdown-item>私信</el-dropdown-item>
-          <el-dropdown-item>系统通知</el-dropdown-item>
-          <el-dropdown-item> 消息设置</el-dropdown-item>
+          <el-dropdown-item
+            >评论和@ <el-badge class="mark" is-dot
+          /></el-dropdown-item>
+          <el-dropdown-item
+            >赞和收藏 <el-badge class="mark" is-dot
+          /></el-dropdown-item>
+          <el-dropdown-item
+            >私信 <el-badge class="mark" is-dot
+          /></el-dropdown-item>
+          <el-dropdown-item
+            >系统通知 <el-badge class="mark" is-dot
+          /></el-dropdown-item>
+          <el-dropdown-item>
+            消息设置 <el-badge class="mark" is-dot
+          /></el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -40,8 +50,6 @@ export default {
   data() {
     return {
       userInfo: {},
-      avatarUrl:
-        "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       fits: " scale-down  ",
       logoUrl:
         "https://peng12.oss-cn-beijing.aliyuncs.com/08f790529822720ebb5da98571cb0a46f21fab3a.png",

@@ -17,7 +17,7 @@
     <el-dropdown>
       <span class="el-dropdown-link">
         <span style="margin-right: 10px">{{ adminInfo.name }}</span>
-        <el-avatar size="medium" :src="adminInfo.Img"></el-avatar
+        <el-avatar size="medium" :src="adminInfo.avatar"></el-avatar
         ><i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
@@ -45,10 +45,7 @@ export default {
     return {
       url: "https://gitee.com/y_project/RuoYi-Vue",
       // 定义用户登录对象
-      adminInfo: {
-        name: "",
-        Img: require("/src/assets/icon/images/头像 4.png"),
-      },
+      adminInfo: {},
     };
   },
   computed: {
@@ -70,8 +67,7 @@ export default {
   },
   created() {
     //获取用户登录信息
-    let admin = JSON.parse(window.localStorage.getItem("access-admin"));
-    this.adminInfo.name = admin.name;
+    this.adminInfo = this.$store.state.user.userInfo;
   },
   methods: {
     goto() {

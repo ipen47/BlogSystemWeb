@@ -10,15 +10,16 @@
       <span class="title">花荣博客</span>
     </div>
     <el-menu
-      default-active="/index"
+      :default-active="$route.path"
       class="el-menu-demo"
       mode="horizontal"
       @select="handleSelect"
       router
     >
       <el-menu-item index="/index">首页</el-menu-item>
-      <el-menu-item index="/hotArticle">热门文章</el-menu-item>
-      <el-menu-item index="/news">新闻资讯</el-menu-item>
+      <el-menu-item index="/articleCategory">文章分类</el-menu-item>
+      <el-menu-item index="/news">热点资讯</el-menu-item>
+      <el-menu-item index="/questionSub">问题反馈</el-menu-item>
       <el-menu-item index="/peopleCenter">个人中心</el-menu-item>
     </el-menu>
     <!-- 搜索 -->
@@ -51,7 +52,7 @@
     <!-- 如果登录，则显示登录信息 -->
     <el-dropdown v-else style="margin-right: 10px">
       <span class="el-dropdown-link">
-        <el-avatar size="medium" :src="avatarUrl"></el-avatar
+        <el-avatar size="medium" :src="userInfo.avatar"></el-avatar
         ><span style="margin-left: 5px">{{ userInfo.name }}</span
         ><i class="el-icon-arrow-down el-icon--right"></i>
       </span>
@@ -82,8 +83,6 @@ export default {
   data() {
     return {
       userInfo: {},
-      avatarUrl:
-        "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
       fits: " scale-down  ",
       logoUrl:
         "https://peng12.oss-cn-beijing.aliyuncs.com/08f790529822720ebb5da98571cb0a46f21fab3a.png",
@@ -102,10 +101,10 @@ export default {
     loginHome() {
       this.$router.push("/home");
       //获取最新公告
-      getNewNotice().then((resp) => {
+      getNewNotice({ noticeType: 2 }).then((resp) => {
         this.$alert(`${resp.data.noticeContent}`, `${resp.data.noticeTitle}`, {
           confirmButtonText: "确定",
-        });
+        }).catch((err) => {});
       });
       console.log("aaa");
     },
@@ -135,6 +134,7 @@ export default {
   padding: 0px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #e7eaec;
 }
 .logo {
   display: flex;

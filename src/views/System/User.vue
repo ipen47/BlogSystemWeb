@@ -217,15 +217,20 @@
         prop="id"
         sortable
         label="用户编号"
-        width="180"
+        width="100"
         align="center"
       >
       </el-table-column>
-      <el-table-column prop="name" label="姓名" width="180" align="center">
+      <el-table-column label="头像" align="center" width="100px" prop="avatar">
+        <template slot-scope="scope">
+          <el-avatar size="large" :src="scope.row.avatar"></el-avatar>
+        </template>
       </el-table-column>
-      <el-table-column prop="sex" label="性别" width="180" align="center">
+      <el-table-column prop="name" label="姓名" width="120" align="center">
       </el-table-column>
-      <el-table-column prop="age" label="年龄" width="180" align="center">
+      <el-table-column prop="sex" label="性别" width="100" align="center">
+      </el-table-column>
+      <el-table-column prop="age" label="年龄" width="100" align="center">
       </el-table-column>
       <el-table-column
         prop="telphone"

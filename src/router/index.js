@@ -36,9 +36,14 @@ const constantRoutes = [
         component: () => import("@/views/FrontView/IndexView/Index"),
       },
       {
-        path: "/hotArticle",
-        name: "热门文章",
-        component: () => import("@/views/FrontView/HotArticle"),
+        path: "/articleCategory",
+        name: "文章分类",
+        component: () => import("@/views/FrontView/ArticleCategory"),
+      },
+      {
+        path: "/questionSub",
+        name: "问题反馈",
+        component: () => import("@/views/FrontView/QuestionSub"),
       },
       {
         path: "/news",

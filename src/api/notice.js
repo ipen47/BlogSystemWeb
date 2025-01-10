@@ -11,11 +11,11 @@ export function getNotice(data) {
   });
 }
 //获取最新公告
-export function getNewNotice() {
+export function getNewNotice(data) {
   return request({
     url: "notice/newNotice",
     method: "get",
-
+    params: data,
     headers: {
       "Content-Type": "application/json;charset=UTF-8",
     },

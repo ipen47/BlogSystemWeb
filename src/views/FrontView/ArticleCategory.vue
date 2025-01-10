@@ -1,5 +1,5 @@
 <template>
-  <div>分类管理</div>
+  <div>文章分类</div>
 </template>
 
 <script>

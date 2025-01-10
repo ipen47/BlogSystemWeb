@@ -8,7 +8,7 @@
         <div class="avatar">
           <el-avatar
             :size="100"
-            :src="circleUrl"
+            :src="user.avatar"
             style="margin: 0 70px"
           ></el-avatar>
           <el-upload
@@ -81,8 +81,6 @@ export default {
     return {
       user: {},
       role: "",
-      circleUrl:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
     };
   },
   component: {
