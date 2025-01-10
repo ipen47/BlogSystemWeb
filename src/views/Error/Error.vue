@@ -38,6 +38,7 @@
   </div>
 </template>
 <script>
+import { removeAdminInfo } from "@/utils/storage";
 export default {
   //   created() {
   //     this.$notify({
@@ -51,7 +52,7 @@ export default {
   //   },
   methods: {
     relogin() {
-      localStorage.removeItem("access-admin");
+      removeAdminInfo();
       this.$router.push({ path: "/login" });
     },
   },

@@ -74,7 +74,7 @@
 <script>
 import { login } from "@/api/login";
 import { getCodeImg } from "@/api/captcha";
-
+import { setAdminInfo } from "@/utils/storage";
 export default {
   name: "Login",
 
@@ -141,10 +141,7 @@ export default {
                     type: "success",
                   });
                   //保存当前用户信息
-                  localStorage.setItem(
-                    "access-admin",
-                    JSON.stringify(resp.data)
-                  );
+                  setAdminInfo(resp.data);
                   this.$router.push("/");
                 }
               })

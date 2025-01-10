@@ -115,6 +115,7 @@ import BackTop from "@/components/Front/BackTop";
 import Catalog from "@/components/Front/Catalog.vue";
 import Comment from "@/components/Front/Comment.vue";
 import { getArticleDetails } from "@/api/articles";
+import { getArticleId, removeArticleId } from "@/utils/storage";
 export default {
   components: {
     CommentNav,
@@ -133,7 +134,8 @@ export default {
   },
   computed: {
     articleId() {
-      return this.$route.query.id || localStorage.getItem("articleId");
+      let articleId = getArticleId();
+      return this.$route.query.id || articleId;
     },
   },
   methods: {
@@ -151,9 +153,9 @@ export default {
       return tagTypes[index % tagTypes.length];
     },
   },
-  watch: {},
-
-  mounted() {},
+  destroyed() {
+    removeArticleId();
+  },
 };
 </script>
 

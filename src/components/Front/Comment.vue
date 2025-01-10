@@ -19,7 +19,7 @@
       <!-- 发送评论按钮 -->
       <div class="article_comment_item" style="justify-content: end">
         <el-button
-          @click="publishComment()"
+          @click="publishComment(null, content, null)"
           type="primary"
           style="margin-right: 10px"
           >发送</el-button
@@ -77,12 +77,14 @@
                   type="textarea"
                   :rows="1"
                   placeholder="请输入内容"
-                  v-model="content"
+                  v-model="replyContent"
                 ></el-input>
               </div>
               <div class="article_comment_item" style="justify-content: end">
                 <el-button
-                  @click="publishComment(item.commentId, item.userName)"
+                  @click="
+                    publishComment(item.commentId, replyContent, item.userName)
+                  "
                   type="primary"
                   size="medium "
                   style="margin-right: 10px"
@@ -143,7 +145,7 @@
                       type="textarea"
                       :rows="1"
                       placeholder="请输入内容"
-                      v-model="content"
+                      v-model="replyContent"
                     ></el-input>
                   </div>
                   <div
@@ -151,7 +153,13 @@
                     style="justify-content: end"
                   >
                     <el-button
-                      @click="publishComment(item.commentId, sub.userName)"
+                      @click="
+                        publishComment(
+                          item.commentId,
+                          replyContent,
+                          sub.userName
+                        )
+                      "
                       type="primary"
                       size="medium "
                       style="margin-right: 10px"
@@ -180,6 +188,8 @@ export default {
       activeCommentId: null,
       // 评论内容
       content: "",
+      //回复内容
+      replyContent: "",
       //评论对象
       comment: {},
     };
@@ -204,10 +214,10 @@ export default {
         .catch((err) => {});
     },
     //发表评论
-    publishComment(parentId, target) {
+    publishComment(parentId, content, target) {
       console.log(this.comment.content);
       this.comment = {
-        content: this.content,
+        content: content,
         userId: this.userId,
         articleId: this.articleId,
         parentId: parentId,
@@ -218,8 +228,10 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message: "评论成功",
+            message: "回复成功",
           });
+          this.content = "";
+          this.open = !this.open;
           this.getCommentData();
         })
         .catch((err) => {});

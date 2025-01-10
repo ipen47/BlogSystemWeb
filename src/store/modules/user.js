@@ -1,19 +1,13 @@
 import { getInfo } from "@/api/getUserData";
+import { getToken } from "@/utils/storage";
 const user = {
   namespaced: true,
   state: {
-    token: "",
+    token: getToken(),
     userInfo: "",
-    roleId: "",
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token;
-    },
-    SET_ROLE_ID: (state, roleId) => {
-      state.roleId = roleId;
-    },
     SET_USER_INFO: (state, userInfo) => {
       state.userInfo = userInfo;
     },
@@ -23,7 +17,6 @@ const user = {
     async GetInfo({ commit }, userId) {
       await getInfo({ id: userId })
         .then((res) => {
-          commit("SET_ROLE_ID", res.data.roleId);
           commit("SET_USER_INFO", res.data);
         })
         .catch((error) => {});

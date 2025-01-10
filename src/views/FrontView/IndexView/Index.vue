@@ -195,6 +195,7 @@ import Carousel from "@/components/Front/Carousel.vue";
 import BackTop from "@/components/Front/BackTop";
 import { getArticleBySort } from "@/api/articles";
 import { getAllCategories } from "@/api/category";
+import { setArticleId } from "@/utils/storage";
 export default {
   name: "ArticleIndex",
   components: {
@@ -276,8 +277,7 @@ export default {
         .catch((err) => {});
     },
     loadDetailsById(id) {
-      console.log("id", id);
-      localStorage.setItem("articleId", id);
+      setArticleId(id);
       this.$router.push(`/detail?id=${id}`);
     },
 

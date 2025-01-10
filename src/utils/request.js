@@ -3,8 +3,8 @@ import axios from "axios";
 //单独引入ui组件
 import { Message, Notification, Loading } from "element-ui";
 import globalConfig from "@/utils/gloabl.config";
+import { getToken, removeAdminInfo } from "@/utils/storage";
 import router from "@/router";
-import Vue from "vue";
 //2.创建axios对象
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -27,10 +27,10 @@ service.interceptors.request.use(
     //设置token
     let whitelist = globalConfig.WhiteListApi; //白名单：不需要设置token的请求
     let url = config.url;
-    let adminInfo = JSON.parse(window.localStorage.getItem("access-admin"));
+    let token = getToken();
     //如果请求不在白名单中且携带token,则在请求头设置token
-    if (whitelist.indexOf(url) === -1 && adminInfo) {
-      config.headers["token"] = adminInfo.token;
+    if (whitelist.indexOf(url) === -1 && token) {
+      config.headers["token"] = token;
     }
     return config;
   },
@@ -50,7 +50,7 @@ service.interceptors.response.use(
     let msg = response.data.msg || "未知错误";
     if (code === 401) {
       //token过期，无权限访问
-      localStorage.removeItem("access-admin");
+      removeAdminInfo();
       Message.info("token已过期,请重新登录");
       router.push("/error");
       return Promise.reject(msg);
@@ -66,7 +66,6 @@ service.interceptors.response.use(
     //   return Promise.reject();
     // }
     else if (code == 500) {
-      console.log("500");
       Message.error("系统未知错误，请联系管理员");
       return Promise.reject(msg);
     } else if (code === -1 || code === -2) {
