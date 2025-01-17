@@ -54,18 +54,7 @@ service.interceptors.response.use(
       Message.info("token已过期,请重新登录");
       router.push("/error");
       return Promise.reject(msg);
-    }
-    // if (code === 403) {
-    //   //未登录，无权限访问
-    //   router.push("/login");
-    //   Message.info("请先登录！");
-    //   return Promise.reject();
-    // }
-    // if (code == 404) {
-    //   router.push("/E404");
-    //   return Promise.reject();
-    // }
-    else if (code == 500) {
+    } else if (code == 500) {
       Message.error("系统未知错误，请联系管理员");
       return Promise.reject(msg);
     } else if (code === -1 || code === -2) {

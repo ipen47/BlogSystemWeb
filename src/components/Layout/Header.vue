@@ -92,10 +92,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$store.dispatch("LogOut").then((res) => {
-            console.log(res);
-            location.reload();
-          });
+          this.$store.dispatch("LogOut");
 
           this.$router.push("/login");
         })

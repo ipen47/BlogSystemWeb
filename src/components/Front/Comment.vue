@@ -3,8 +3,10 @@
     <div class="article_comment">
       <!-- 评论个数统计 -->
       <div class="article_comment_item">
-        <span style="padding: 10px">评论</span>
-        <span style="margin-left: 10px">5</span>
+        <span style="font-size: 20px">评论</span>
+        <span style="margin-left: 10px; font-size: 18px; color: #999ea5">{{
+          commentCount
+        }}</span>
       </div>
       <!-- 评论输入框 -->
       <div class="article_comment_item">
@@ -12,7 +14,7 @@
           style="margin: 0 10px"
           type="textarea"
           :rows="2"
-          placeholder="请输入内容"
+          placeholder="善语结善缘，恶语伤人心"
           v-model="content"
         ></el-input>
       </div>
@@ -22,7 +24,8 @@
           @click="publishComment(null, content, null)"
           type="primary"
           style="margin-right: 10px"
-          >发送</el-button
+          plain
+          >发布</el-button
         >
       </div>
       <!-- 评论回复 -->
@@ -30,7 +33,7 @@
         <!-- 一级回复 -->
         <div
           class="comment_list_item"
-          v-for="item in comment"
+          v-for="item in commentsData"
           :key="item.commentId"
         >
           <!-- 头像 -->
@@ -76,7 +79,8 @@
                   style="margin: 0 10px"
                   type="textarea"
                   :rows="1"
-                  placeholder="请输入内容"
+                  placeholder="善语结善缘，恶语伤人心"
+                  clearable
                   v-model="replyContent"
                 ></el-input>
               </div>
@@ -88,7 +92,8 @@
                   type="primary"
                   size="medium "
                   style="margin-right: 10px"
-                  >发送</el-button
+                  plain
+                  >发布</el-button
                 >
               </div>
             </div>
@@ -144,8 +149,9 @@
                       style="margin: 0 10px"
                       type="textarea"
                       :rows="1"
-                      placeholder="请输入内容"
+                      placeholder="善语结善缘，恶语伤人心"
                       v-model="replyContent"
+                      clearable
                     ></el-input>
                   </div>
                   <div
@@ -163,7 +169,8 @@
                       type="primary"
                       size="medium "
                       style="margin-right: 10px"
-                      >发送</el-button
+                      plain
+                      >发布</el-button
                     >
                   </div>
                 </div>
@@ -190,6 +197,8 @@ export default {
       content: "",
       //回复内容
       replyContent: "",
+      //评论数据
+      commentsData: [],
       //评论对象
       comment: {},
     };
@@ -201,6 +210,16 @@ export default {
     userId() {
       return this.$store.getters.userId;
     },
+    //评论数量
+    commentCount() {
+      let count = 0;
+      count = this.commentsData.length;
+
+      this.commentsData.forEach((item) => {
+        count += item.children.length;
+      });
+      return count;
+    },
   },
   methods: {
     //获取评论数据
@@ -209,12 +228,20 @@ export default {
       console.log("开始请求~");
       getCommentList(this.articleId)
         .then((res) => {
-          this.comment = res.data;
+          this.commentsData = res.data;
         })
         .catch((err) => {});
     },
     //发表评论
     publishComment(parentId, content, target) {
+      if (!content) {
+        this.$message({
+          showClose: true,
+          message: "你还没有评论！",
+          type: "warning",
+        });
+        return;
+      }
       console.log(this.comment.content);
       this.comment = {
         content: content,
@@ -269,11 +296,10 @@ export default {
 }
 .article_comment_item {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
+  padding: 5px 10px;
   align-items: center;
-  font-size: 20px;
-  font-weight: bold;
-  margin: 10px 0px;
+  margin: 10px 5px;
 }
 .comment_list {
   padding: 10px 20px;
@@ -281,5 +307,10 @@ export default {
 .comment_list_item {
   padding: 10px 20px;
   display: flex;
+}
+.el-textarea__inner {
+  font-weight: bolder;
+  font-size: 18px;
+  color: black;
 }
 </style>

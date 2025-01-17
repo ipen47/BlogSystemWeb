@@ -1,5 +1,5 @@
 <template>
-  <div class="user-center"><user-center></user-center></div>
+  <div><UserCenter></UserCenter></div>
 </template>
 
 <script>
@@ -11,8 +11,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.user-center {
-  padding: 50px 200px;
-}
-</style>
+<style></style>

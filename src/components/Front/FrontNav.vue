@@ -57,11 +57,12 @@
         ><i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <router-link to="/userCenter"
+        <router-link to="/peopleCenter"
           ><el-dropdown-item icon=" el-icon-user"
             >个人中心</el-dropdown-item
           ></router-link
         >
+        <el-dropdown-item icon=" el-icon-user">我的反馈</el-dropdown-item>
         <el-dropdown-item
           icon=" el-icon-thumb"
           v-if="userInfo.roleId === 2"

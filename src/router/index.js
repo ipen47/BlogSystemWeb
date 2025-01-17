@@ -80,7 +80,7 @@ const constantRoutes = [
       {
         path: "/userCenter",
         name: "个人中心",
-        component: () => import("@/views/userCenter/Index.vue"),
+        component: () => import("@/views/UserCenter.vue"),
         meta: {
           title: "个人中心",
         },

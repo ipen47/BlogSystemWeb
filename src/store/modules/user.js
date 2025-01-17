@@ -15,11 +15,8 @@ const user = {
 
   actions: {
     async GetInfo({ commit }, userId) {
-      await getInfo({ id: userId })
-        .then((res) => {
-          commit("SET_USER_INFO", res.data);
-        })
-        .catch((error) => {});
+      let res = await getInfo({ id: userId });
+      commit("SET_USER_INFO", res.data);
     },
   },
 };

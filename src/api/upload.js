@@ -7,3 +7,11 @@ export function uploadArticleImg(data) {
     data: data,
   });
 }
+//上传用户头像
+export function uploadAvatarImg(data) {
+  return request({
+    url: "blog/upload/avatarImg",
+    method: "post",
+    data: data,
+  });
+}

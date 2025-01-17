@@ -12,8 +12,11 @@
             style="margin: 0 70px"
           ></el-avatar>
           <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="#"
+            class="avatar-uploader"
+            :http-request="uploadAvatar"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
           >
             <el-button size="small" type="primary" style="margin: 5px 80px"
               >点击上传</el-button
@@ -73,9 +76,11 @@
 </template>
 
 <script>
+import { uploadAvatarImg } from "@/api/upload";
 import resetPwd from "./resetPwd.vue";
 import userInfo from "./userInfo.vue";
 export default {
+  name: "UserCenter",
   components: { resetPwd, userInfo },
   data() {
     return {
@@ -98,6 +103,38 @@ export default {
       } else {
         this.role = "普通用户";
       }
+    },
+    //上传头像
+    uploadAvatar(option) {
+      const formData = new FormData();
+      formData.append("file", option.file); // 添加上传的文件
+
+      uploadAvatarImg(formData)
+        .then((response) => {
+          // 调用成功回调
+          console.log("成功上传");
+          option.onSuccess(response, option.file);
+        })
+        .catch((error) => {
+          // 调用失败回调
+          option.onError(error);
+        });
+    },
+    //上传成功后
+    handleAvatarSuccess(res, file) {
+      console.log("成功", res);
+    },
+    //上传成功前
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg" || "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     },
   },
 };
