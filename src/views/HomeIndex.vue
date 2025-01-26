@@ -1,16 +1,15 @@
 <template>
   <div calss="container">
-    <h1>欢迎你，开始美好的一天吧！</h1>
+    <h1>欢迎你--{{ userName }}，开始美好的一天吧！</h1>
     <!-- 分割线 -->
     <el-divider></el-divider>
     <!-- 走马灯 -->
-    <el-carousel :interval="4000" type="card">
+    <!-- <el-carousel :interval="4000" type="card">
       <el-carousel-item v-for="item in banner" :key="item">
         <el-image style="height: 300px,width:380px" :src="item"></el-image>
       </el-carousel-item>
-    </el-carousel>
-    <!-- 分割线 -->
-    <el-divider></el-divider>
+    </el-carousel> -->
+
     <!-- 博客数据统计展示部分 -->
     <el-row :gutter="0">
       <el-col :span="5" style="background-color: #fff">
@@ -108,13 +107,14 @@
 </template>
 <script>
 import * as echarts from "echarts";
+import { getAdminInfo } from "@/utils/storage";
 export default {
   components: {},
   data() {
     return {
       //倒计时日期参数
       yeardate: new Date("2025-01-29"), //2025春节
-      targetDate: new Date("2025-01-01T00:00:00"), // 2025年元旦
+      targetDate: new Date("2026-01-01T00:00:00"), // 2025年元旦
       days: 0,
       hours: 0,
       minutes: 0,
@@ -134,7 +134,12 @@ export default {
       activeNames: ["1"],
     };
   },
-  computed: {},
+  computed: {
+    userName() {
+      const userInfo = getAdminInfo();
+      return userInfo.userName;
+    },
+  },
   created() {
     this.startCountdown();
   },

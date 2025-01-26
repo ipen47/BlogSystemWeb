@@ -42,8 +42,18 @@ const constantRoutes = [
       },
       {
         path: "/questionSub",
-        name: "问题反馈",
-        component: () => import("@/views/FrontView/QuestionSub"),
+        name: "意见反馈",
+        component: () => import("@/views/FrontView/FeedbackSub"),
+      },
+      {
+        path: "SysNotice",
+        name: "系统公告",
+        component: () => import("@/views/FrontView/SysNotice"),
+      },
+      {
+        path: "/myFeedback",
+        name: "我的反馈",
+        component: () => import("@/views/FrontView/MyFeedback.vue"),
       },
       {
         path: "/news",

@@ -116,9 +116,7 @@
         width="100"
       >
         <template slot-scope="scope">
-          <el-tag type="warning" v-if="scope.row.noticeType === '1'"
-            >通知</el-tag
-          >
+          <el-tag type="warning" v-if="scope.row.noticeType === 1">通知</el-tag>
           <el-tag type="success" v-else>公告</el-tag>
         </template>
       </el-table-column>

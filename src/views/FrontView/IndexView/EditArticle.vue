@@ -209,32 +209,35 @@ export default Vue.extend({
         })
         .catch((err) => {});
     },
-    publishBlog() {
-      console.log("form", this.form);
-      this.$refs["form"].validate((valid) => {
-        if (valid) {
-          this.form.status = 1; //设置状态为已发布
-          saveBlog(this.form)
-            .then((res) => {
-              if (res.msg == "success") {
-                this.$message({
-                  type: "success",
-                  message: "发布成功",
-                });
-                this.$router.push("/index");
-              } else {
-                this.$message({
-                  type: "error",
-                  message: "发布失败",
-                });
-              }
-            })
-            .catch((err) => {});
-        }
-      });
+    async publishBlog() {
+      try {
+        const valid = await new Promise((resolve, reject) => {
+          this.$refs["form"].validate((valid) => {
+            if (valid) {
+              resolve(true);
+            } else {
+              reject(false);
+            }
+          });
+        });
 
-      // this.$message.error("暂未开发，敬请期待^-^");
+        if (valid) {
+          this.form.status = 1; // 设置状态为已发布
+          await saveBlog(this.form);
+          this.$message({
+            type: "success",
+            message: "发布成功",
+          });
+          this.$router.push("/index");
+        }
+      } catch (error) {
+        this.$message({
+          type: "error",
+          message: "发布失败，请检查表单输入",
+        });
+      }
     },
+
     saveDraft() {
       this.$refs["form"].validate((valid) => {
         if (valid) {

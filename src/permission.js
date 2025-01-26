@@ -13,8 +13,7 @@ router.beforeEach(async (to, from, next) => {
       next("/");
     } else {
       if (!store.getters.roleId) {
-        //获取用户信息
-        console.log("没有用户信息");
+        //如果无用户信息则获取用户信息
         await store.dispatch("user/GetInfo", admin.userId);
         //动态生成菜单路由
         await store.dispatch("menu/loadMenu", store.getters.roleId);

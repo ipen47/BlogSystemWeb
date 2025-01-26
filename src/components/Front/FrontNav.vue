@@ -19,7 +19,8 @@
       <el-menu-item index="/index">首页</el-menu-item>
       <el-menu-item index="/articleCategory">文章分类</el-menu-item>
       <el-menu-item index="/news">热点资讯</el-menu-item>
-      <el-menu-item index="/questionSub">问题反馈</el-menu-item>
+      <el-menu-item index="/questionSub">意见反馈</el-menu-item>
+      <el-menu-item index="/SysNotice">系统公告</el-menu-item>
       <el-menu-item index="/peopleCenter">个人中心</el-menu-item>
     </el-menu>
     <!-- 搜索 -->
@@ -62,7 +63,12 @@
             >个人中心</el-dropdown-item
           ></router-link
         >
-        <el-dropdown-item icon=" el-icon-user">我的反馈</el-dropdown-item>
+        <router-link to="/myFeedback">
+          <el-dropdown-item icon=" el-icon-user"
+            >我的反馈</el-dropdown-item
+          ></router-link
+        >
+
         <el-dropdown-item
           icon=" el-icon-thumb"
           v-if="userInfo.roleId === 2"

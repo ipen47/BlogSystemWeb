@@ -35,7 +35,6 @@ service.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error("请求错误:", error);
     return Promise.reject(error);
   }
 );
@@ -68,9 +67,9 @@ service.interceptors.response.use(
       setTimeout(() => {
         notificationInstance.close();
       }, 2000); // 2秒后关闭通知
-      return response.data;
+      return Promise.reject(msg);
     } else if (code !== 200) {
-      return Promise.reject("error");
+      return Promise.reject(msg);
     } else {
       return response.data;
     }

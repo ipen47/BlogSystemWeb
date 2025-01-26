@@ -122,7 +122,11 @@ export default {
     },
     //上传成功后
     handleAvatarSuccess(res, file) {
-      console.log("成功", res);
+      this.user.avatar = res;
+      this.$message({
+        message: "上传成功！",
+        type: "success",
+      });
     },
     //上传成功前
     beforeAvatarUpload(file) {
